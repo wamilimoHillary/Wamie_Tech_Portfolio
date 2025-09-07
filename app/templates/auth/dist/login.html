@@ -1,0 +1,58 @@
+{% extends "main/base.html" %}
+
+{% block title %}Login - WamieCrafts{% endblock %}
+
+
+{% block content %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">
+{% endblock %}
+
+<main class="student_main">  <!-- Change background class as needed -->
+    <div class="form-container">
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+
+        <h2>Log In to WamieCrafts</h2>
+
+        <form action="" method="post">  <!-- action left blank for now -->
+            <div class="input-group">
+                <input type="text" id="email_phone" name="email_phone" placeholder=" " required>
+                <label for="email_phone">*Email or Phone</label>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" name="password" placeholder=" " required>
+                <label for="password">*Password</label>
+            </div>
+
+            <div class="remember-forget-container">
+                <a href="#" class="forgot-password">
+                    <i class="fa fa-key"></i>Forgot password?
+                </a>
+            </div>
+            <hr>
+            <button type="submit" class="form-button">
+                Continue <i class="fas fa-sign-in-alt"></i>
+            </button>
+        </form>
+
+        <p>New to WamieCrafts?
+            <a href="#" class="forgotten-password">
+                <i class="fa fa-arrow-right"></i> Register
+            </a>
+        </p>
+
+    </div>
+</main>
+{% endblock %}

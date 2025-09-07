@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Wamie Tech Portfolio{% endblock %}</title>
+         <!-- Link for Google Material Icons -->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+  <!--link to font family-->
+      <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
+
+
+</head>
+<body>
+    <header>
+       <div class="logo-container">
+            <!-- Logo image and name -->
+            <img class="logo-image" src="{{ url_for('static', filename='images/rocket1.png') }}" alt="Logo">
+            <h1 class="logo-name">Wamietech🤩</h1>
+        </div>
+
+                    <nav>
+                        <a href="{{ url_for('main.index') }}"><i class="fas fa-home"></i> Home</a>
+                        <a href="{{ url_for('project.projects') }}"><i class="fas fa-briefcase"></i> Projects</a>
+                        <a href="" class="buy_me_coffee"><i class="fas fa-coffee"></i> Coffee</a>
+                        <a href="{{ url_for('service.services') }}"><i class="fas fa-cogs"></i> Services</a>
+                        <a href="{{ url_for('auth.login') }}"><i class="fas fa-user"></i> Account</a>
+                    </nav>
+
+
+        <a href="#contact" class="hire-me"><i class="fas fa-envelope"></i> Hire Me</a>
+
+
+
+
+             <!-- Hamburger menu button -->
+           <button class="menu-btn" id="menu-btn" aria-label="Menu">&#8942;&#8942;&#8942;</button>
+
+            <!--darkmode button-->
+           <div class="darkmode-switch-container">
+            <input type="checkbox" id="toggle-dark-mode" class="darkmode-input">
+            <label for="toggle-dark-mode" class="darkmode-slider">
+                <i class="material-icons darkmode-icon" id="sun">wb_sunny</i>
+                <i class="material-icons darkmode-icon" id="moon">nightlight_round</i>
+            </label>
+            <p class="darkmode-label">Mode</p>
+         </div>
+
+    </header>
+
+<!-- Sidebar -->
+<aside id="sidebar">
+    <div class="sidebar-profile">
+        <img src="{{ url_for('static', filename='images/hillary.png') }}" alt="profile">
+        <p>WAMILIMO HILLARY</p>
+        <p>+254796981288</p> <hr>
+
+         <!--admin button OR LINK-->
+        <a href="#" class="hidden_admin_function" id="hidden_admin_function" data-url="">
+            <i class="fa fa-user"></i> I am the Admin 🤩
+        </a>
+    </div> <hr>
+
+    <a href=""><i class="fa fa-user"></i> About Me</a>
+    <a href=""><i class="fa fa-envelope"></i> Contact Me</a>
+    <a href=""><i class="fa fa-question-circle"></i> Help</a>
+    <a href=" "><i class="fa fa-star"></i> Testimonials</a>
+    <a href=""><i class="fa fa-users"></i> My Team</a>
+    <a href=""><i class="fa fa-exclamation-circle"></i> Terms & Conditions</a>
+
+</aside>
+
+  <!-- Modals -->
+
+<div id="hireModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" data-modal="hireModal">&times;</span>
+    <h2>Hire Me</h2>
+    <p>Let's work together!,Let's connect instantly. I’d love to bring your ideas to life. 🚀</p>
+
+
+    <div class="hire-links">
+      <a href="tel:+254710578792" class="hire-btn call"><i class="fas fa-phone"></i> Call Me</a>
+      <a href="https://wa.me/254710578792" target="_blank" class="hire-btn whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+      <a href="mailto:wamietech@gmail.com" class="hire-btn email"><i class="fas fa-envelope"></i> Email Me</a>
+      <a href="https://facebook.com/Wamilimo%20Hillarie" target="_blank" class="hire-btn fb"><i class="fab fa-facebook"></i> Facebook</a>
+      <a href="https://www.linkedin.com/in/wamilimo-hillarie-452a7631a/" target="_blank" class="hire-btn li"><i class="fab fa-linkedin"></i> LinkedIn</a>
+    </div>
+
+  </div>
+</div>
+
+<div id="coffeeModal" class="modal">
+  <div class="modal-content coffeeModal">
+    <span class="close-btn" data-modal="coffeeModal">&times;</span>
+    <h2>Buy Me a Coffee</h2>
+    <p>Your support fuels my creativity ☕💡</p>
+
+    <form class="form-container coffee-form-container">
+      <div class="input-group">
+        <input type="tel" id="mpesa-number" name="mpesa-number" placeholder=" " required>
+        <label for="mpesa-number">MPESA Number</label>
+      </div>
+
+      <div class="input-group">
+        <input type="number" id="amount" name="amount" placeholder=" " required>
+        <label for="amount">Amount (KES)</label>
+      </div>
+
+      <button type="submit" class="form-button">
+        Pay Now <i class="fas fa-coffee"></i>
+      </button>
+    </form>
+  </div>
+</div>
+
+
+
+
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 WamieTech. All Rights Reserved.</p>
+    </footer>
+
+     <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+
+
+</body>
+</html>

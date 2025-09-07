@@ -1,0 +1,94 @@
+{% extends "main/base.html" %}
+
+
+
+{% block content %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">
+{% endblock %}
+
+<section class="index-container">
+    <figure class="profile-section">
+        <img src="{{ url_for('static', filename='images/hillary.png') }}" alt="Profile Pic" class="profile-image">
+    </figure>
+<!--The typewritter-->
+    <figure class="typewriter-section">
+        <div class="typewriter">
+            <span id="typing-text"></span>
+        </div>
+
+        <div class="button-container">
+
+                 <a href="{{ url_for('static', filename='images/WAMILIMO_CV_2025.pdf') }}"
+                   class="btn download-cv-btn"
+                   download="WAMILIMO_CV_2025.pdf"
+                   aria-label="Download Wamilimo Hillary's CV">
+                   Download CV &nbsp; <i class="fas fa-download"></i>
+                </a>
+
+                <a href="#" class="btn2">
+                    Learn More &nbsp;<i class="fas fa-arrow-right"></i>
+                </a>
+        </div>
+
+    </figure>
+</section>
+
+<script>
+
+
+/*Typewriter*/
+document.addEventListener("DOMContentLoaded", function () {
+    const textElement = document.getElementById('typing-text');
+    if (textElement) {
+        const texts = [
+            "Hey, I am Wamilimo Hillary. 👋",
+            "A software developer student from St. Paul's University 🎓",
+            "Journey marked by a relentless commitment, determination, discipline, and focus, balancing both theoretical knowledge and practical skill. 💡",
+            "You can only relate that I gave it my best effort by: ",
+            "   1) What has Wamilimo done? 🤔",
+            "   2) What can wamilimo Do? 🤖",
+            "The answer is yes, I thrive on challenges. 💪",
+            "To be satisfied, it's as easy as preparing chapati. 🍳",
+            "Simply Explore the portfolio, and enjoy the services. 🚀"
+        ];
+
+        let textIndex = 0;
+        let charIndex = 0;
+        const typingSpeed = 80; // typing speed in milliseconds
+        const erasingSpeed = 20; // erasing speed in milliseconds
+        const delayBetweenTexts = 2000; // delay between texts in milliseconds
+
+        function type() {
+            if (charIndex < texts[textIndex].length) {
+                textElement.textContent += texts[textIndex].charAt(charIndex);
+                charIndex++;
+                setTimeout(type, typingSpeed);
+            } else {
+                setTimeout(erase, delayBetweenTexts);
+            }
+        }
+
+        function erase() {
+            if (charIndex > 0) {
+                textElement.textContent = texts[textIndex].substring(0, charIndex - 1);
+                charIndex--;
+                setTimeout(erase, erasingSpeed);
+            } else {
+                textIndex = (textIndex + 1) % texts.length;
+                setTimeout(type, typingSpeed);
+            }
+        }
+
+        setTimeout(type, typingSpeed);
+    } else {
+        console.error('Element with id "typing-text" not found');
+    }
+});
+
+</script>
+
+
+{% endblock %}

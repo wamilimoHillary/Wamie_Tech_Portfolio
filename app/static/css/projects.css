@@ -1,0 +1,108 @@
+/* Apply general background and text colors */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+/* Table Styles */
+.projects_table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 18px;
+    text-align: left;
+    background-color: var(--bg2-color);
+}
+
+.projects_table th, .projects_table td {
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    color: var(--text-color3);
+}
+
+.projects_table th {
+    background-color: var(--bg-color3);
+    color: var(--text-color);
+}
+
+.projects_table tbody tr:nth-child(even) {
+    background: var(--bg-gradient);
+}
+
+
+/* Table Links */
+.projects_table a {
+    background: var(--accent-color);
+    padding: 5px 10px;
+    text-decoration: none;
+    color: var(--text-color);
+    border-radius: 5px;
+}
+
+.projects_table a:hover {
+    opacity: var(--button-hover-opacity);
+}
+
+/* Section Styles */
+.project_section {
+    padding: 40px;
+    background-image: var(--bg-image);
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    color: var(--text-color);
+}
+
+.project_section .section_intro {
+    padding: 2px;
+    border-radius: 8px;
+    background: var(--bg-gradient);
+    text-align: center;
+}
+
+.project_section .section_intro h1 {
+    font-size: 30px;
+    color: var(--text-color);
+    font-weight: bold;
+}
+
+/* Optional: Styling for dark mode */
+.dark-mode .projects_table {
+    background-color: var(--bg2-color);
+}
+
+.dark-mode .projects_table th {
+    background-color: var(--bg-color3);
+}
+
+
+/* Responsive table for small screens */
+@media screen and (max-width: 768px) {
+    /* Reduce font size for better readability on small screens */
+    .projects_table {
+        font-size: 14px;
+        width: 100%;
+        min-width: 600px; /* Ensure the table content doesn't get squished */
+        display: block;
+        overflow-x: scroll;
+        white-space: nowrap;
+    }
+
+    .project_section .section_intro h1{
+      font-size: 1.2rem;
+    }
+    
+    /* Make the table scrollable horizontally */
+    .project_section {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+
+    .projects_table th, .projects_table td {
+        text-align: center; /* Center text for better alignment */
+        padding: 8px; /* Adjust padding for smaller screens */
+    }
+
+    
+}

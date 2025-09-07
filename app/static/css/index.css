@@ -1,0 +1,140 @@
+/* Main styling */
+main {
+    background: var(--bg-gradient);
+    height: 80vh;
+}
+
+/* General styles */
+.index-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.profile-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.typewriter-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+}
+
+/* Profile image */
+.profile-image {
+    max-width: 50%;
+    height: auto;
+    border-radius: 50%;
+}
+
+/* Typewriter styles */
+.typewriter {
+    font-size: 2rem;
+    color: var(--text-color);
+    font-weight: bold;
+}
+
+/* Button container */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+
+/* Common styles */
+.button-container .btn, 
+.button-container .btn2 {
+    padding: 10px 20px;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: medium;
+    background-color: var(--accent-color);
+    transition: background-color 0.3s ease;
+}
+
+/* Unique styles */
+.button-container .btn {
+    border-radius: 25px 0 0 25px;
+}
+
+.button-container .btn2 {
+    border-radius: 0 25px 25px 0;
+}
+
+
+.button-container .btn:hover {
+    opacity: var(--button-hover-opacity);
+}
+
+
+
+.fa-download {
+    color: var(--text-color);
+}
+
+/* Footer styling */
+footer {
+    position: relative;  /* Change to relative to avoid overlap */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: var(--text-color);
+    padding: 20px;
+    font-weight: bold;
+}
+
+/* Responsive styles */
+@media (min-width: 768px) {
+    .index-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .profile-section {
+        width: 40%;
+    }
+
+    .typewriter-section {
+        width: 40%;
+    }
+
+    .profile-image {
+        max-width: 100%;
+    }
+
+    .typewriter {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 767px) {
+    .profile-section,
+    .typewriter-section {
+        width: 100%;
+    }
+
+    footer {
+        padding: 0;
+        font-size: small;
+        text-align: center;
+    }
+
+    .typewriter {
+        font-size: 1.5rem;
+    }
+
+    .profile-image {
+        max-width: 90%;
+    }
+}

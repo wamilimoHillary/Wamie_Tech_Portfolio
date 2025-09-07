@@ -1,0 +1,44 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/projects.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">
+{% endblock %}
+<section class="project_section">
+    <div class="section_intro">
+        <h1>Explore My Projects</h1>
+        <p>Just Scroll hit it one click!!</p>
+    </div>
+    <table class="projects_table">
+        <thead>
+            <tr>
+                <th>NO</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Link</th>
+                <th>Date Created</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+            <tr>
+                <td>{{ project[0] }}</td>
+                <td>{{ project[1] }}</td>
+                <td>{{ project[2] }}</td>
+                <td>{{ project[3] }}</td>
+                <td>
+                    {% if project[4] %}
+                    <a href="{{ project[4] }}" target="_blank">View</a>
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+                <td>{{ project[5] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}

@@ -1,0 +1,457 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: var(--bg-gradient);
+    color: var(--text-color);
+   overflow-x: hidden;
+}
+
+
+/* Header */
+header {
+    background: var(--bg-gradient);
+    color: var(--text-color);
+    padding: 20px;
+    margin:0;
+    height: 16vh;
+    flex-wrap:wrap;
+    display:flex;
+    max-width:99%;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+
+/* Logo container */
+.logo-container {
+    display: flex;
+    align-items: center; /* Centers items vertically */
+
+}
+
+.logo-image {
+    width: 10%;
+}
+
+.logo-name {
+    margin-left: 13px;
+    font-size: x-large;
+    color: var(--text-color);
+}
+
+.menu-btn {
+    border: none;
+    border-top: 2px solid var(--accent-color);
+    border-bottom: 2px solid var(--accent-color);
+    padding: 2px 10px;
+    position: absolute; /* Ensures it stays at the right */
+    color: var(--text-color);
+    right: 2%; /* Adjusts the position from the right */
+    top: 2rem;
+    font-weight: bolder;
+    font-size: xx-large;
+    background: var(--bg-gradient);
+    border-radius: 50% 50% 50% 0;
+    z-index: 100000;
+}
+
+
+
+nav {
+        position: absolute;
+        top:2rem;
+        left:25%;
+        width: 60%;
+        background: var(--bg2-color);
+        display: flex;
+        justify-content: space-around;
+        padding: 10px;
+        border-radius:30px;
+        box-shadow: 0px -2px 6px var(--box-shadow-color);
+        z-index: 100;
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--text-color3);
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+
+.buy_me_coffee {
+    border-radius: 20px;
+    background-color: var(--accent-color);
+    padding: 0.3rem 0.8rem;
+    color: var(--text-color);
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.buy_me_coffee:hover {
+    background-color: var(--sidebar-highlight);
+}
+
+
+.hire-me {
+    background: var(--sidebar-highlight);
+    color: var(--text-color);
+    padding: 0.5rem 1.5rem;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    display:flex;
+    align-items: center;
+    gap: 5px;
+    position:relative;
+    top:1.5rem;
+    left:2%;
+    box-shadow: 0px 4px 6px var(--box-shadow-color);
+}
+
+/* Active sidebar link */
+#sidebar a.active {
+    position: relative;
+    font-weight: bold;
+    color: var(--accent-color); /* Change text color */
+}
+
+/* Underline effect */
+#sidebar a.active::after {
+    content: "";
+    position: absolute;
+    bottom: -2px; /* Adjust the underline position */
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--accent-color); /* Same as text/icon color */
+    border-radius: 2px;
+}
+
+/* Change icon color of active link */
+#sidebar a.active .fa {
+    color: var(--accent-color) !important;
+}
+
+/* Override protection for dark mode switch */
+.darkmode-switch-container {
+    all: initial; /* Reset any inherited styles */
+    position: absolute !important;
+    top: 7rem !important;
+    right: 40px !important;
+    width: 40px !important;
+    height: 20px !important;
+}
+
+.darkmode-input {
+    display: none !important;
+}
+
+.darkmode-slider {
+    all: initial !important;
+    position: absolute !important;
+    cursor: pointer !important;
+    background-color: var(--switch-color) !important;
+    border-radius: 20px !important;
+    height: 100% !important;
+    width: 100% !important;
+    transition: 0.4s !important;
+}
+
+.darkmode-slider:before {
+    all: initial !important;
+    content: "" !important;
+    position: absolute !important;
+    height: 14px !important;
+    width: 14px !important;
+    left: 3px !important;
+    bottom: 3px !important;
+    background-color: var(--text-color) !important;
+    border-radius: 50% !important;
+    transition: 0.4s !important;
+}
+
+.darkmode-input:checked + .darkmode-slider:before {
+    transform: translateX(18px) !important;
+}
+
+.darkmode-icon {
+    position: absolute !important;
+    color: var(--text-color) !important;
+    font-size: small !important;
+}
+
+#sun {
+    left: 23px !important;
+    top: 3px !important;
+}
+
+#moon {
+    left: 4px !important;
+    top: 3px !important;
+}
+
+.darkmode-label {
+    position: relative !important;
+    top: 18px !important;
+    font-size: xx-small !important;
+    color: var(--text-color);
+}
+
+/* Sidebar styles */
+#sidebar {
+    position: fixed; /* Ensures it stays in place */
+    top: 0;
+    left: -120%; /* Starts hidden off-screen */
+    width: 200px; /* Full width of the screen */
+    height: 100vh; /* Full height of the screen */
+    background: var(--sidebar-bg);
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    border-right: 1px solid var(--bg-gradient);
+    z-index: 99999;
+    border: 2px solid var(--accent-color);
+    border-left: none;
+    border-bottom: none;
+    border-top: none;
+
+    transition: left 0.4s ease-in-out; /* Smooth sliding effect */
+}
+
+/* Show sidebar when active */
+#sidebar.active {
+    left: 0; /* Moves it into view */
+}
+
+/* Sidebar profile */
+.sidebar-profile {
+    text-align: center;
+}
+
+.sidebar-profile img {
+    width: 150px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.sidebar-profile p {
+    margin: 5px 0;
+    text-align: center;
+    color: var(--text-color3);
+    font-weight: bolder;
+}
+
+#sidebar a {
+    display: flex;
+    align-items: center;
+    color: var(--text-color);
+    text-decoration: none;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+#sidebar a:hover {
+    background-color: var(--sidebar-highlight);
+}
+
+/* Admin button link */
+.hidden_admin_function {
+    background: var(--accent-color);
+    color: var(--text-color);
+}
+
+/* Icons */
+.fa {
+    font-size: 20px;
+    color: var(--text-color);
+    margin-right: 15px;
+}
+
+
+/* FOOTER */
+footer {
+    text-align: center;
+    padding: 10px;
+    margin-top: 20px;
+    color: var(--text-color);
+}
+        /* Modal Styles */
+.modal {
+  display: none; /* hidden by default */
+  position: fixed;
+  z-index: 100001;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5);
+  padding-right:5px;
+}
+
+.coffeeModal{
+     background: url('../images/kid1-removebg-preview.png') no-repeat  center/cover;
+}
+
+.coffee-form-container{
+    width:90% !important;
+    margin:auto !important;
+     background: var(--form-color);
+    padding: 30px 40px; /* Increased padding for larger form */
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+     width: 60vh;
+    max-width: 400px; /* Fixed width for large screens */
+    text-align: center;
+    color: var(--text-primary);
+    margin: auto 10px;
+}
+
+.coffeeModal h2,.coffeeModal p{
+    color:var(--accent-color);
+    text-align:center;
+}
+
+.form-container h2 {
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+.modal-content {
+  background-color: var(--bg2-color);
+  margin: 10% auto;
+  padding: 20px;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 10px;
+  position: relative;
+  animation: fadeIn 0.3s ease-in-out;
+   color: var(--text-color3);
+}
+
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+
+
+.hire-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.hire-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 1rem;
+  border-radius: 8px;
+  color: white;
+  background-color: var(--accent-color);
+  transition: 0.3s ease;
+}
+
+.hire-btn:hover {
+  opacity: 0.9;
+}
+
+/* Specific platform colors */
+.call { background-color: #28a745; }
+.whatsapp { background-color: #25D366; }
+.email { background-color: #da6e02; }
+.fb { background-color: #3b5998; }
+.li { background-color: #0077b5; }
+
+
+/* MOBILE NAV (AT THE BOTTOM) */
+@media (max-width: 768px) {
+    header {
+        align-items: center;
+        border-radius: 0;
+        padding: 10px;
+    }
+
+    nav {
+        position: fixed ;
+        bottom: 0;
+        width: 100%;
+        left: 0;
+        top:auto;
+        border-radius:0;
+        background: var(--bg2-color);
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 0;
+        box-shadow: 0px -2px 6px var(--box-shadow-color);
+        z-index: 100;
+    }
+
+    .logo-image {
+    width: 20%;
+}
+
+   .menu-btn {
+    right: 10%;
+    left: auto;
+}
+
+
+    nav a {
+        flex-direction: column;
+        font-size: 14px;
+        text-align: center;
+        gap: 2px;
+    }
+
+
+    nav a i {
+        font-size: 18px;
+    }
+
+
+   .logo-name {
+
+    font-size:medium;
+
+}
+    main {
+        margin-bottom: 60px;
+        margin-top: 10px;
+    }
+
+    .hire-me {
+        margin-top: 10px;
+
+    }
+
+
+    .buy_me_coffee {
+    border-radius: 0 0 20px 20px;
+    padding:0.5rem;
+}
+
+    footer {
+        margin-bottom: 60px;
+    }
+}

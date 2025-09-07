@@ -1,0 +1,44 @@
+/* Define color variables for light mode */
+:root {
+    --bg-color: rgb(29, 70, 78); /* Light mode background */
+    --bg2-color: rgb(249, 236, 213); /* Secondary background */
+    --bg-color3: rgb(31, 78, 88); /*third background */
+    --bg-gradient: linear-gradient(90deg, #00d2ff 0%, #3a47d5 100%);
+    --text-color: #ffffff; /* Text color */
+    --text-color2:  rgb(255, 116, 9);
+    --text-color3: #2c2a2a; /* Text color 3*/
+    --accent-color: #ff8000; /* Accent color */
+    --button-hover-opacity: 0.7; /* Button hover opacity */
+    --switch-color: rgb(255, 116, 9); /* Switch color */
+    --sidebar-bg:linear-gradient(90deg, #3a47d5 0%, #00d2ff 100%) ; /* Sidebar background */
+    --sidebar-highlight: rgb(255, 116, 9); /* Sidebar highlight */
+    --bg-image: url(images/close-up-hand-holding-smartphone.jpg);
+    --overlay-color: linear-gradient(90deg, #3a47d5d3 0%, #00d0ff52 100%);
+    --box-shadow-color: rgba(12, 92, 95, 0.6);
+    --border-color:rgb(255, 116, 9);
+    --flash-success-bg:rgb(0, 155, 0);
+    --flash-error-bg:rgb(228, 8, 8);
+     --form-color:rgba(12, 12, 116, 0.47);
+     --link-default:  #ffffff;
+    --link-hover:  #ff8000;
+    --border-color: #ff8000;
+
+}
+
+/* Define color variables for dark mode */
+.dark-mode {
+    --bg-color: #1e1e1e; /* Dark mode background */
+    --bg2-color: #343333; /* Secondary background */
+    --bg-gradient: linear-gradient(90deg, #0f0f0f 0%, #1c1c1c 40%, #1c2b36 50%, #101820 60%, #283c48 80%, #1a1a1a 100%);
+    --button-hover-opacity: 0.9; /* Dark mode button hover opacity */
+      --sidebar-bg: #222020; /* Dark mode sidebar background */
+      --overlay-color: rgba(0, 0, 0, 0.5);  /* Semi-transparent dark overlay */
+      --box-shadow-color: rgba(0, 0, 0, 0.15);  /* Soft, subtle shadow */
+      --bg-image:url(images/elegant-smartphone-composition.jpg);
+      --bg-color3: rgb(66, 66, 66);
+      --text-color3: #ffffff; /* Text color 3*/
+      --flash-success-bg:rgb(0, 155, 0);
+      --flash-error-bg:rgb(228, 8, 8);
+
+}
+

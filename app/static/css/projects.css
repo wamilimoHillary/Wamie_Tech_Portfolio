@@ -1,10 +1,79 @@
-/* Apply general background and text colors */
-body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
+/* ------------------------
+   General Styles
+------------------------- */
+
+/* ------------------------
+   Search Bar
+------------------------- */
+.search_container {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+    width: 100%;
 }
 
-/* Table Styles */
+.search_bar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 700px;
+    background: #fff;
+    border-radius: 50px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    padding: 4px 8px;
+    border: 1px solid var(--border-color) !important;
+}
+
+.search_input {
+    flex: 1;
+    border: none !important;
+    background: #fff;       /* ✅ solid white background for contrast */
+    padding: 12px 18px;
+    font-size: 16px;
+    outline: none;
+    color: #333;
+    border-radius: 50px;
+}
+
+.search_input::placeholder {
+    color: #555 !important;            /* ✅ darker placeholder for visibility */
+    opacity: 1;
+}
+
+.search_btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 10px 14px;
+    border-radius: 50%;
+    color: #555;
+    transition: background 0.2s;
+}
+
+.search_btn:hover {
+    background: #f2f2f2;
+}
+
+/* Responsive Search */
+@media (max-width: 726px) {
+    .search_bar {
+        max-width: 90%;
+        padding: 2px 6px;
+    }
+
+    .search_input {
+        font-size: 14px;
+        padding: 10px 12px;
+    }
+
+    .search_btn {
+        padding: 8px 10px;
+    }
+}
+
+/* ------------------------
+   Projects Table
+------------------------- */
 .projects_table {
     width: 100%;
     border-collapse: collapse;
@@ -14,7 +83,8 @@ body {
     background-color: var(--bg2-color);
 }
 
-.projects_table th, .projects_table td {
+.projects_table th, 
+.projects_table td {
     padding: 12px 15px;
     border: 1px solid var(--border-color);
     color: var(--text-color3);
@@ -29,7 +99,6 @@ body {
     background: var(--bg-gradient);
 }
 
-
 /* Table Links */
 .projects_table a {
     background: var(--accent-color);
@@ -43,7 +112,9 @@ body {
     opacity: var(--button-hover-opacity);
 }
 
-/* Section Styles */
+/* ------------------------
+   Section Wrapper
+------------------------- */
 .project_section {
     padding: 40px;
     background-image: var(--bg-image);
@@ -53,56 +124,26 @@ body {
     color: var(--text-color);
 }
 
-.project_section .section_intro {
-    padding: 2px;
-    border-radius: 8px;
-    background: var(--bg-gradient);
-    text-align: center;
-}
-
-.project_section .section_intro h1 {
-    font-size: 30px;
-    color: var(--text-color);
-    font-weight: bold;
-}
-
-/* Optional: Styling for dark mode */
-.dark-mode .projects_table {
-    background-color: var(--bg2-color);
-}
-
-.dark-mode .projects_table th {
-    background-color: var(--bg-color3);
-}
-
-
-/* Responsive table for small screens */
+/* Responsive Table */
 @media screen and (max-width: 768px) {
-    /* Reduce font size for better readability on small screens */
     .projects_table {
         font-size: 14px;
         width: 100%;
-        min-width: 600px; /* Ensure the table content doesn't get squished */
+        min-width: 600px;
         display: block;
         overflow-x: scroll;
         white-space: nowrap;
     }
-
-    .project_section .section_intro h1{
-      font-size: 1.2rem;
-    }
     
-    /* Make the table scrollable horizontally */
     .project_section {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
+        padding: 20px;
     }
 
-
-    .projects_table th, .projects_table td {
-        text-align: center; /* Center text for better alignment */
-        padding: 8px; /* Adjust padding for smaller screens */
+    .projects_table th, 
+    .projects_table td {
+        text-align: center;
+        padding: 8px;
     }
-
-    
 }

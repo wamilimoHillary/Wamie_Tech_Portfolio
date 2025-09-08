@@ -5,40 +5,62 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/projects.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">
 {% endblock %}
+
+
+<main style="overflow-x:hidden;">
+
+
 <section class="project_section">
-    <div class="section_intro">
-        <h1>Explore My Projects</h1>
-        <p>Just Scroll hit it one click!!</p>
+     <!-- Searchbar -->
+    <div class="search_container">
+        <form class="search_bar">
+            <input  type="text" class="search_input" placeholder="Search project by name or Status">
+            <button type="submit" class="search_btn">
+                <!-- Search Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 
+                    3.85a1 1 0 0 0 1.415-1.415l-3.85-3.85zm-5.242.656a5 
+                    5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+                </svg>
+            </button>
+        </form>
     </div>
-    <table class="projects_table">
-        <thead>
-            <tr>
-                <th>NO</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>Link</th>
-                <th>Date Created</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for project in projects %}
-            <tr>
-                <td>{{ project[0] }}</td>
-                <td>{{ project[1] }}</td>
-                <td>{{ project[2] }}</td>
-                <td>{{ project[3] }}</td>
-                <td>
-                    {% if project[4] %}
-                    <a href="{{ project[4] }}" target="_blank">View</a>
-                    {% else %}
-                    N/A
-                    {% endif %}
-                </td>
-                <td>{{ project[5] }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+
+    <!-- Table Container -->
+    <div class="table-container">
+        <!-- Projects Table -->
+        <table class="projects_table">
+            <thead>
+                <tr>
+                    <th>NO</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Link</th>
+                    <th>Date Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for project in projects %}
+                <tr>
+                    <td>{{ project[0] }}</td>
+                    <td>{{ project[1] }}</td>
+                    <td>{{ project[2] }}</td>
+                    <td>{{ project[3] }}</td>
+                    <td>
+                        {% if project[4] %}
+                        <a href="{{ project[4] }}" target="_blank">View</a>
+                        {% else %}
+                        N/A
+                        {% endif %}
+                    </td>
+                    <td>{{ project[5] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </section>
+
+</main>
 {% endblock %}

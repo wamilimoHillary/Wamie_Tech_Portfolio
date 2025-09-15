@@ -55,10 +55,14 @@
 
 <!-- Sidebar -->
 <aside id="sidebar">
+
+  <span class="close-sidebar">&times;</span>
+
+
     <div class="sidebar-profile">
         <img src="{{ url_for('static', filename='images/hillary.png') }}" alt="profile">
         <p>WAMILIMO HILLARY</p>
-        <p>+254796981288</p> <hr>
+        <p>+254710578792</p> <hr>
 
          <!--admin button OR LINK-->
         <a href="#" class="hidden_admin_function" id="hidden_admin_function" data-url="">
@@ -66,12 +70,12 @@
         </a>
     </div> <hr>
 
-    <a href=""><i class="fa fa-user"></i> About Me</a>
-    <a href=""><i class="fa fa-envelope"></i> Contact Me</a>
-    <a href=""><i class="fa fa-question-circle"></i> Help</a>
-    <a href=" "><i class="fa fa-star"></i> Testimonials</a>
-    <a href=""><i class="fa fa-users"></i> My Team</a>
-    <a href=""><i class="fa fa-exclamation-circle"></i> Terms & Conditions</a>
+    <a href="{{ url_for('main.about') }}"><i class="fa fa-user"></i> About Me</a>
+    <a href="{{url_for('main.contacts')}}"><i class="fa fa-envelope"></i> Contact Me</a>
+    <a href="{{url_for('main.help')}}"><i class="fa fa-question-circle"></i> Help</a>
+    <a href="{{url_for('testimonial.testimonials')}}"><i class="fa fa-star"></i> Testimonials</a>
+    <a href="{{ url_for('team.team')}}"><i class="fa fa-users"></i> My Team</a>
+    <a href="{{url_for('main.help')}}"><i class="fa fa-exclamation-circle"></i> Terms & Conditions</a>
 
 </aside>
 
@@ -88,7 +92,7 @@
       <a href="tel:+254710578792" class="hire-btn call"><i class="fas fa-phone"></i> Call Me</a>
       <a href="https://wa.me/254710578792" target="_blank" class="hire-btn whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
       <a href="mailto:wamietech@gmail.com" class="hire-btn email"><i class="fas fa-envelope"></i> Email Me</a>
-      <a href="https://facebook.com/Wamilimo%20Hillarie" target="_blank" class="hire-btn fb"><i class="fab fa-facebook"></i> Facebook</a>
+      <a href="https://facebook.com/Wamie%20wamie" target="_blank" class="hire-btn fb"><i class="fab fa-facebook"></i> Facebook</a>
       <a href="https://www.linkedin.com/in/wamilimo-hillarie-452a7631a/" target="_blank" class="hire-btn li"><i class="fab fa-linkedin"></i> LinkedIn</a>
     </div>
 

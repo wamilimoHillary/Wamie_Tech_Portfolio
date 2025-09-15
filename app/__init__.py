@@ -15,10 +15,14 @@ def create_app():
     from app.routes.auth import auth
     from app.routes.service import service_bp
     from app.routes.project import project_bp
+    from app.routes.testimonial import testimonial_bp
+    from app.routes.team import team_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth)
     app.register_blueprint(service_bp)
     app.register_blueprint(project_bp)
+    app.register_blueprint(testimonial_bp)
+    app.register_blueprint(team_bp)
 
     return app

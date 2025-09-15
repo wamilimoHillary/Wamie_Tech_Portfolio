@@ -1,0 +1,35 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/testimonials.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">
+{% endblock %}
+
+<!-- Team Section -->
+<section class="testimonials-section">
+    <div class="section_intro">
+        <h1>Meet the Entire Team</h1>
+        <p>Get to know the talented individuals who make up our dedicated team.</p>
+    </div>
+
+    <!-- Loop through the team members -->
+    {% for member in team_members %}
+    <div class="testimonial-card-container">
+        <figure class="testimonial-card">
+            <div class="client-image-container">
+                <img src="{{ url_for('static', filename=member[5]) }}" class="client-image" alt="{{ member[0] }}">
+                <i class="fa fa-eye eye-icon"></i>
+            </div>
+            <figcaption class="client-caption">
+                <h2>{{ member[1] }}</h2>
+                <h5>{{ member[2] }}</h5>
+                <p>Role: {{ member[3]}}</p>
+            </figcaption>
+        </figure>
+    </div>
+    {% endfor %}
+</section>
+
+{% endblock %}

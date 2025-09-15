@@ -74,3 +74,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+
+// Close sidebar only when × is clicked
+document.querySelector("#sidebar .close-sidebar").addEventListener("click", function () {
+    document.getElementById("sidebar").classList.remove("active");
+});

@@ -1,0 +1,86 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+<link rel="stylesheet" href="{{ url_for('static',filename='css/colors.css')}}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+{% endblock %}
+
+
+<section class="about">
+    <details>
+        <summary>Terms & Conditions</summary>
+        <div class="contents">
+            <p><strong>Downpayment Requirement:</strong> A non-refundable downpayment is required to initiate services. The remaining balance must be cleared upon completion of the service or as agreed.</p>
+
+            <p><strong>Contact Information:</strong> Users must provide a valid email address for receiving service tokens and updates. A valid phone number is also required for confirmation and support.</p>
+            
+            <p><strong>Data Privacy:</strong> All personal data provided by users is securely stored and will not be shared with third parties, except as required by law or to deliver the service.</p>
+            
+            <p><strong>Service Completion:</strong> Project timelines and completion depend on mutual agreement. Any delays caused by incomplete user input or unclear instructions may extend deadlines.</p>
+            
+            <p><strong>User Responsibility:</strong> Users are expected to provide accurate details and necessary files to ensure successful service delivery.</p>
+            
+            <p><strong>Revisions:</strong> Minor revisions after project delivery are allowed within a specified timeframe (e.g., 7 days). Major changes may incur additional costs.</p>
+            
+            <p><strong>Cancellation Policy:</strong> Services canceled after initiation will not be refunded for work already completed.</p>
+            
+            <p><strong>Intellectual Property:</strong> Final deliverables are the property of the user upon full payment unless otherwise specified in the agreement.</p>
+            
+            <p>By proceeding with our services, you agree to these terms and conditions.</p>
+            
+    </div>
+    </details>
+</section>
+
+<section class="about">
+    <div class="section_intro">
+        <h1>Need Quick Help?</h1>
+        <p>If you need assistance, you can reach out to me through
+             the contact information provided, the contact form, a phone call, or via the social media links listed below.</p>
+             <h2>Frequently Asked Questions</h2>
+    </div>
+    
+    <details>
+        <summary>What services do you offer?</summary>
+        <div class="contents">
+        <p>I offer a wide range of services tailored to meet your specific needs.</p>
+                 <a href="{{ url_for('service.services') }}">Explore</a>
+        </div>
+    </details>
+    
+    <details>
+        <summary>How can I hire you?</summary>
+        <div class="contents">
+        <p>You can reach out to me through social media, the contact form, or by using the "Hire Me" button on the homepage.</p>
+    </div>
+    </details>
+    
+    <details>
+        <summary>Have you worked on projects?</summary>
+        <div class="contents">
+        <p>Yes, I have worked on multiple projects that showcase my skills and experience.</p>
+         <a href="{{ url_for('project.projects') }}">Explore</a>
+    </div>
+    </details>
+</section>
+
+<!-- Footer Section -->
+<footer class="footer">
+    <h3 class="section_intro" >Connect with me</h3>
+    <a href="https://www.facebook.com/WamilimoHillary" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
+    <a href="https://www.linkedin.com/in/WamilimoHillary" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+    <a href="https://wa.me/0796981288" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+    <a href="https://github.com/WamilimoHillary" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+    <a href="mailto:wamilimohillarie@example.com" target="_blank"><i class="fas fa-envelope"></i> Email Me</a>
+    <a href="https://www.instagram.com/WamilimoHillary" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+    <a href="https://x.com/WamilimoHillary" target="_blank"><i class="fab fa-x"></i> X</a>
+    <a href="https://www.tiktok.com/@WamilimoHillary" target="_blank"><i class="fab fa-tiktok"></i> TikTok</a>
+
+    <div class="back-to-top">
+        <a href="#top"><i class="fas fa-arrow-up"></i> Back to Top</a>
+    </div>
+</footer>
+
+{% endblock %}

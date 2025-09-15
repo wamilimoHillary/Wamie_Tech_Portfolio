@@ -1,0 +1,155 @@
+
+main{
+    display: flex;
+    flex-direction: column;
+    margin:0;
+}
+/* WHY ME */
+.about {
+    display: flex;
+    flex-wrap: wrap;
+    background: var(--bg2-color);
+    border-bottom: 2px solid var(--border-color);
+ 
+}
+
+.section_intro {
+    flex: 100%;
+    text-align: center;
+    color: var(--text-color2);
+}
+
+/* details */
+details {
+    flex: 1 1 22%;
+    margin: 15px;
+    text-align: center;
+}
+
+/* summary of content */
+summary {
+    background: var(--bg-gradient);
+    color: var(--text-color);
+    padding: 5px;
+    border-radius: 5px;
+    margin: 5px;
+    border: 1.5px solid var(--accent-color);
+    font-size: medium;
+    font-weight: bold;
+    font-family: 'Lobster', cursive;
+}
+
+/* summary of content when open */
+details[open] summary {
+    background: var(--accent-color);
+    box-shadow: none;
+    color: var(--text-color3);
+    
+}
+
+/* contents */
+.contents {
+    font-size: medium;
+    font-weight: lighter;
+    font-family: 'Lobster', cursive;
+    color: var(--text-color3);
+    border: 2px solid var(--border-color);
+    border-top: none;
+    padding: 2rem;
+    border-radius: 0 0 10px 10px;
+    text-align: left;
+}
+
+summary i {
+    margin-left: 15px; /* Adds space between the icon and text */
+    color: rgb(255, 116, 9); /* Change icon color */
+    font-size: 2rem;
+}
+
+
+/* Footer Styles */
+.footer {
+    background: var(--bg-gradient);
+    padding: 30px 0;
+    color: var(--text-color);
+    text-align: center;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer h3{
+    color: var(--text-color3);
+}
+
+.footer a {
+    display: inline-block;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 1.5rem;
+    margin: 10px;
+    transition: color 0.3s ease;
+}
+
+.footer a:hover {
+    color: var(--accent-color);
+}
+
+.back-to-top a {
+    text-decoration:underline;
+    color: var(--text-color);
+    font-size: 1.2rem;
+    margin-top: 20px;
+    display: inline-block;
+}
+
+.back-to-top a:hover {
+    color: var(--accent-color);
+}
+
+
+
+
+/* For responsive layout */
+@media (max-width: 768px) {
+    details {
+        max-width: 100%;
+        flex: 1 1 100%;
+    }
+
+    .contents {
+        font-family: 'Courier New', Courier, monospace;
+    }
+
+    /* summary of content */
+summary {
+    font-family:'Times New Roman', Times, serif;
+}
+
+    .footer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 20px 0;
+        padding-bottom: 60px;
+        position:relative;
+        left:0;
+        bottom: 0;
+    }
+
+    .footer a {
+        font-size: 1rem;
+        margin: 10px;
+        text-align: center;
+        flex: 1 1 100%;
+        max-width: 40%;
+
+    }
+
+    .back-to-top {
+        width: 100%;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+}

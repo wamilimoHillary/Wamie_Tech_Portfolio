@@ -1,0 +1,80 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+{% endblock %}
+
+<section class="about">
+    <div class="section_intro">
+        <h1>Contact Me</h1>
+    </div>
+    <details>
+        <summary><i class="fas fa-envelope"></i> Email</summary>
+        <div class="contents">
+            <p>wamietech@gmail.com</p>
+        </div>
+    </details>
+
+    <details>
+        <summary><i class="fas fa-phone-alt"></i> Phone</summary>
+        <div class="contents">
+            <p>+254-710-578-792</p>
+        </div>
+    </details>
+
+    <details>
+        <summary><i class="fas fa-map-marker-alt"></i> Location</summary>
+        <div class="contents">
+            <p>Nairobi, Kenya</p>
+        </div>
+    </details>
+
+    <details>
+        <summary><i class="fas fa-comments"></i> Social Media</summary>
+        <div class="contents">
+            <p>
+                <a href="https://facebook.com/wamilimohillary" target="_blank" style="color: #3b5998;">Facebook</a><br><hr>
+                <a href="https://linkedin.com/in/wamilimo" target="_blank" style="color: #0077b5;">LinkedIn</a><br><hr>
+                <a href="https://github.com/wamilimo" target="_blank" style="color: #333;">GitHub</a><br><hr>
+                <a href="https://instagram.com/wamilimo" target="_blank" style="color: #C13584;">Instagram</a><br> <hr>
+                <a href="https://tiktok.com/@wamilimo" target="_blank" style="color: #010101;">TikTok</a><br> <hr>
+                <a href="https://twitter.com/wamilimo" target="_blank" style="color: #1DA1F2;">Twitter (X)</a><hr>
+            </p>
+        </div>
+    </details>
+
+    <details>
+        <summary><i class="fas fa-paper-plane"></i> Message Me</summary>
+        <div class="contents">
+            <form action="" method="POST">
+                <input type="text" name="name" placeholder="Your Name" required><br><br>
+                <input type="email" name="email" placeholder="Your Email" required><br><br>
+                <textarea name="message" rows="5" placeholder="Your Message" required></textarea><br><br>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </details>
+</section>
+
+
+<!-- Footer Section -->
+<footer class="footer">
+    <h3 class="section_intro" >Connect with me</h3>
+    <a href="https://www.facebook.com/WamilimoHillary" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
+    <a href="https://www.linkedin.com/in/WamilimoHillary" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+    <a href="https://wa.me/0796981288" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+    <a href="https://github.com/WamilimoHillary" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+    <a href="mailto:wamilimohillarie@example.com" target="_blank"><i class="fas fa-envelope"></i> Email Me</a>
+    <a href="https://www.instagram.com/WamilimoHillary" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+    <a href="https://x.com/WamilimoHillary" target="_blank"><i class="fab fa-x"></i> X</a>
+    <a href="https://www.tiktok.com/@WamilimoHillary" target="_blank"><i class="fab fa-tiktok"></i> TikTok</a>
+
+    <div class="back-to-top">
+        <a href="#top"><i class="fas fa-arrow-up"></i> Back to Top</a>
+    </div>
+</footer>
+
+{% endblock %}

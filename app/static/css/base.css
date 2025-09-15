@@ -131,6 +131,25 @@ nav a {
     border-radius: 2px;
 }
 
+/* Sidebar close button */
+#sidebar .close-sidebar {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--text-color);
+  cursor: pointer;
+  z-index: 100000;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+#sidebar .close-sidebar:hover {
+  color: var(--accent-color);
+  transform: scale(1.2);
+}
+
+
 /* Change icon color of active link */
 #sidebar a.active .fa {
     color: var(--accent-color) !important;
@@ -206,13 +225,13 @@ nav a {
     position: fixed; /* Ensures it stays in place */
     top: 0;
     left: -120%; /* Starts hidden off-screen */
-    width: 200px; /* Full width of the screen */
+    width: 240px; /* Full width of the screen */
     height: 100vh; /* Full height of the screen */
     background: var(--sidebar-bg);
     padding: 20px;
     font-family: Arial, sans-serif;
     border-right: 1px solid var(--bg-gradient);
-    z-index: 99999;
+    z-index: 100000;
     border: 2px solid var(--accent-color);
     border-left: none;
     border-bottom: none;
@@ -445,6 +464,9 @@ footer {
 
     }
 
+    #sidebar{
+        width: 80%;
+    }
 
     .buy_me_coffee {
     border-radius: 0 0 20px 20px;

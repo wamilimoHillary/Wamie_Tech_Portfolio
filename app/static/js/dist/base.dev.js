@@ -65,5 +65,9 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   });
+}); // Close sidebar only when × is clicked
+
+document.querySelector("#sidebar .close-sidebar").addEventListener("click", function () {
+  document.getElementById("sidebar").classList.remove("active");
 });
 //# sourceMappingURL=base.dev.js.map

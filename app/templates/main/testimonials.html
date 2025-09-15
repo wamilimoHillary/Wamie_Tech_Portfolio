@@ -1,0 +1,56 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/testimonials.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">
+{% endblock %}
+
+<!-- Testimonials Section -->
+<section class="testimonials-section">
+    <div class="section_intro">
+        <h1>Hear from Trusted Clients</h1>
+    </div>
+
+    {% for testimonial in testimonials %}
+    <div class="testimonial-card-container">
+        <figure class="testimonial-card">
+            <div class="client-image-container">
+                <img src="{{ url_for('static', filename=testimonial[2]) }}" class="client-image" alt="{{ testimonial[1] }}">
+                <i class="fa fa-eye eye-icon"></i> <!-- Eye Icon for hover -->
+            </div>
+            <figcaption class="client-caption">
+                <h2>{{ testimonial[1] }}</h2>
+                <h5>{{ testimonial[3] }} - {{ testimonial[4] }}</h5>
+                <p>Project: {{ testimonial[5] }}</p>
+                <p>Engagement: {{ testimonial[7] }}</p>
+            </figcaption>
+            <button class="read-btn">Read Testimonial</button>
+            <div class="testimonial-modal">
+                <span class="close-btn">&times;</span>
+                <p>{{ testimonial[6] }}</p>
+            </div>
+        </figure>
+    </div>
+    {% endfor %}
+</section>
+
+<script>
+    document.querySelectorAll('.read-btn').forEach((button) => {
+        button.addEventListener('click', (event) => {
+            const card = event.target.closest('.testimonial-card');
+            const modal = card.querySelector('.testimonial-modal');
+            modal.style.display = 'block';
+        });
+    });
+
+    document.querySelectorAll('.close-btn').forEach((button) => {
+        button.addEventListener('click', (event) => {
+            const modal = event.target.closest('.testimonial-modal');
+            modal.style.display = 'none';
+        });
+    });
+</script>
+
+{% endblock %}

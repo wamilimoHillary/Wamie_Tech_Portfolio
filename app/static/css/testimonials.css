@@ -1,0 +1,147 @@
+
+/* Testimonials Section */
+.testimonials-section {
+    display: flex; /* Use flexbox layout */
+    flex-wrap: wrap; /* Allow the items to wrap into multiple rows */
+    gap: 2px;
+    background: var(--bg2-color);
+    justify-content: center; /* Center the cards horizontally */
+}
+
+.section_intro {
+    flex: 100%;
+    text-align: center;
+    color: var(--text-color2);
+}
+
+.section_intro h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.testimonial-card-container {
+    display: flex;
+    justify-content: center;
+    background-color: var(--bg-color3);
+}
+
+.testimonial-card {
+    background: var(--bg-color3);
+    box-shadow: 0 4px 8px var(--box-shadow-color);
+    text-align: center;
+    max-width: 120%;
+    position: relative;
+}
+
+.client-image-container {
+    position: relative;
+    overflow: hidden; /* Prevents the image from overflowing */
+    width: 100%; /* Ensures the image takes full width of the container */
+}
+
+.client-image {
+    width: 60%; /* Keeps the image small initially */
+    height: auto;
+    border-radius: 50%; /* Circular border */
+    transition: all 0.3s ease-in-out; /* Smooth transition for scaling and removing border-radius */
+}
+
+.client-image-container:hover .client-image {
+    width: 100%; /* Expands the image to cover the full container */
+    border-radius: 0%; /* Removes the border-radius to make it rectangular */
+}
+
+.eye-icon {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    font-size: 24px;
+    color:  var(--text-color);
+    transition: opacity 0.3s ease;
+}
+
+
+.client-caption {
+    margin-top: 15px;
+    
+}
+
+.client-caption h2 {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.client-caption h5 {
+    font-size: 16px;
+    color: var(--text-color2);
+}
+
+.read-btn {
+    background-color: var(--accent-color);
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.read-btn:hover {
+    opacity: 0.8;
+}
+
+.testimonial-modal {
+    display: none;
+    position: absolute;
+    top: -5px;
+    left: -18px;
+    width: 100%;
+    height: 95%;
+    background: rgba(0, 0, 0, 0.893);
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 10;
+    overflow: auto;
+    text-align: left;
+    font-weight: bold;
+    line-height: 1.7rem;
+    font-family: Arial, sans-serif;
+}
+
+.testimonial-modal p {
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 30px;
+    cursor: pointer;
+    color: #fff;
+}
+
+/* Media Queries for Responsive Layout */
+@media (min-width: 1200px) { 
+    /* 4 clients per row for large screens (desktops, laptops) */
+    .testimonial-card-container {
+        flex: 0 0 calc(25% - 10px); /* Each card takes up 25% of the width with some gap */
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+    /* 2 or 3 clients per row for tablets */
+    .testimonial-card-container {
+        flex: 0 0 calc(33.33% - 10px); /* 3 clients per row for tablet (adjust as needed) */
+    }
+}
+
+@media (max-width: 767px) {
+    /* 1 client per row for phones */
+    .testimonial-card-container {
+        flex: 0 0 100%; /* Each card takes up 100% of the width */
+    }
+}

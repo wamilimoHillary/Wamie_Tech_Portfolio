@@ -1,46 +1,51 @@
+/* =============================
+   FORM STYLES
+   ============================= */
 
+/* Main Container */
 main {
     display: flex;
     justify-content: center;
+    align-items: center;
     min-height: 70vh;
     background: var(--bg2-color);
     width: 100%;
-
-
+   
 }
 
-.student_main{
-    background: url('../images/hillary.png') no-repeat  center/cover;
-
+/* Background Variant (optional) */
+.student_main {
+    background: url('../images/wamie.jpg') no-repeat center/cover;
+    background-position: 100%;
 }
 
-
-
-/* Form Container with Gradient */
+/* =============================
+   FORM CONTAINER
+   ============================= */
 .form-container {
-
     background: var(--form-color);
-    padding: 30px 40px; /* Increased padding for larger form */
+    padding: 20px;
     border-radius: 20px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-     width: 60vh;
-    max-width: 400px; /* Fixed width for large screens */
+    width: 60vh;
+    max-width: 400px;
     text-align: center;
     color: var(--text-primary);
-    margin: auto 10px;
+    margin: auto;
 }
 
-
-/* Input Group */
+/* =============================
+   INPUT GROUPS & FIELDS
+   ============================= */
 .input-group {
     position: relative;
-    margin-bottom: 20px; /* Increased margin for better spacing */
+    margin-bottom: 20px;
     width: 100%;
 }
 
 input {
-    width: 100%;
-    padding: 12px; /* Increased padding for larger input fields */
+    width: 90%;
+    padding: 12px;
     border: none;
     border-radius: 0 0 10px 10px;
     border-bottom: 2px solid var(--border-color);
@@ -56,6 +61,7 @@ input:focus {
     border-radius: 10px;
 }
 
+/* Labels (Floating Effect) */
 label {
     position: absolute;
     top: 50%;
@@ -68,20 +74,17 @@ label {
     padding: 0 5px;
     transition: 0.3s ease;
     pointer-events: none;
-
 }
 
-/* Floating Label Behavior */
 input:focus + label,
 input:not(:placeholder-shown) + label {
     top: -4px;
     left: 0;
     font-size: 12px;
     color: var(--border-color);
-    border: none;
 }
 
-/* Placeholder Handling */
+/* Placeholders */
 input::placeholder {
     visibility: hidden;
 }
@@ -91,25 +94,29 @@ input:focus::placeholder {
     color: rgb(204, 198, 198);
 }
 
-/* Button */
+/* =============================
+   BUTTONS
+   ============================= */
 .form-button {
     width: 100%;
-    padding: 12px; /* Increased padding for larger button */
+    padding: 12px;
     border: none;
     border-radius: 25px;
     background-color: var(--border-color);
     color: var(--text-primary);
     font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-bottom: 20px; /* Added margin for spacing */
+    transition: opacity 0.3s ease;
+    margin-bottom: 20px;
 }
 
 .form-button:hover {
     opacity: 0.6;
 }
 
-/* Forgot Password Link */
+/* =============================
+   LINKS
+   ============================= */
 .forgot-password {
     display: block;
     text-align: center;
@@ -120,30 +127,34 @@ input:focus::placeholder {
     margin-top: 10px;
 }
 
-.forgotten-password{
+.forgotten-password {
     color: var(--link-hover);
     font-size: large;
-    font-weight:bolder ;
+    font-weight: bolder;
     margin-left: 10px;
 }
 
-.forgot-password:hover{
-    color: var( --link-hover);
+.forgot-password:hover {
+    color: var(--link-hover);
 }
 
 .forgotten-password:hover {
     color: var(--text-primary);
 }
 
-.description{
+.description {
     font-size: x-small;
 }
 
+/* =============================
+   FLASH MESSAGES
+   ============================= */
 .flash-messages {
     width: 90%;
     max-width: 400px;
     z-index: 1000;
     text-align: center;
+    margin: 0 auto 15px;
 }
 
 .flash {
@@ -157,33 +168,45 @@ input:focus::placeholder {
     animation: fadeOut 15s ease-in-out forwards;
 }
 
-/* Flash message colors */
-.flash.success { background:var(--bg-success); } /* Green */
-.flash.danger { background:var(--bg-danger); } /* Red */
-.flash.warning { background-color: #ffc107; color: #333; } /* Yellow */
-.flash.info { background-color: #17a2b8; } /* Blue */
+/* Flash Types */
+.flash.success { background: var(--bg-success); }
+.flash.danger  { background: var(--bg-danger); }
+.flash.warning { background: #ffc107; color: #333; }
+.flash.info    { background: #17a2b8; }
 
-.flash:hover {
-    opacity: 1;
+.flash:hover { opacity: 1; }
+
+/* =============================
+   ANIMATIONS
+   ============================= */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-6px); }
+    100% { transform: translateX(0); }
 }
 
-/* Fade out after 5 seconds */
+.shake { animation: shake 0.5s; }
+
 @keyframes fadeOut {
     from { opacity: 1; }
     to { opacity: 0; }
 }
 
-/* Responsive Design */
+/* =============================
+   RESPONSIVE DESIGN
+   ============================= */
 @media (max-width: 480px) {
     .form-container {
-        padding: 20px; /* Adjusted padding for small screens */
-        max-width: 100%; /* Full width on small screens */
+        padding: 20px;
+        max-width: 100%;
         width: 100%;
     }
 
     input {
         font-size: 14px;
-        padding: 10px; /* Adjusted padding for small screens */
+        padding: 10px;
     }
 
     label {
@@ -192,10 +215,10 @@ input:focus::placeholder {
 
     .form-button {
         font-size: 14px;
-        padding: 10px; /* Adjusted padding for small screens */
+        padding: 10px;
     }
 
     .forgot-password {
-        font-size: 12px; /* Adjusted font size for small screens */
+        font-size: 12px;
     }
 }

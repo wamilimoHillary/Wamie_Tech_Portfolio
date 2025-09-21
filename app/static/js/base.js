@@ -80,3 +80,28 @@ document.addEventListener("DOMContentLoaded", () => {
 document.querySelector("#sidebar .close-sidebar").addEventListener("click", function () {
     document.getElementById("sidebar").classList.remove("active");
 });
+
+
+//Security functionality to display yhe admin login form
+// Admin dashboard link functionality hide the admin form 
+document.addEventListener("DOMContentLoaded", () => {
+    let tapCount = 0;
+    // Get the admin button and its data-url attribute
+    const adminButton = document.getElementById("hidden_admin_function");
+    const adminLoginUrl = adminButton.getAttribute('data-url'); // Get the URL from the data attribute
+    
+    adminButton.addEventListener("click", (event) => {
+        event.preventDefault(); // Prevent default link behavior
+        tapCount++;
+
+        if (tapCount === 4) {
+            // Redirect to the admin login page using the Flask-generated URL
+            window.location.href = adminLoginUrl;
+        }
+
+        // Reset the tap count after 2 seconds of inactivity
+        setTimeout(() => {
+            tapCount = 0;
+        }, 2000);
+    });
+});

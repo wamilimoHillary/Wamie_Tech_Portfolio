@@ -1,7 +1,6 @@
-{% extends "main/base.html" %}
+{% extends "main/base.html" %} 
 
-{% block title %}Login - WamieCrafts{% endblock %}
-
+{% block title %}Admin Login - WamieCraftsPro{% endblock %}
 
 {% block content %}
 
@@ -10,7 +9,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">
 {% endblock %}
 
-<main class="student_main">  <!-- Change background class as needed -->
+<main class="student_main">  <!-- Reuse/change background class as needed -->
     <div class="form-container">
 
         <!-- Flash Messages -->
@@ -24,21 +23,21 @@
         {% endif %}
         {% endwith %}
 
-        <h2>WamieTech Login</h2>
+        <h2>Wamie_Tech</h2>
 
-        <form action="" method="post">  <!-- action left blank for now -->
+        <form action="{{ url_for('auth.admin_login') }}" method="post">
             <div class="input-group">
-                <input type="text" id="email_phone" name="email_phone" placeholder=" " required>
-                <label for="email_phone">*Email or Phone</label>
+                <input type="text" id="email_phone" name="email" placeholder=" " required>
+                <label for="email_phone">* &nbsp;Email/phone</label>
             </div>
             <div class="input-group">
                 <input type="password" id="password" name="password" placeholder=" " required>
-                <label for="password">*Password</label>
+                <label for="password">*&nbsp;Password</label>
             </div>
 
             <div class="remember-forget-container">
                 <a href="#" class="forgot-password">
-                    <i class="fa fa-key"></i>Forgot password?
+                    <i class="fa fa-key"></i> Forgot password?
                 </a>
             </div>
             <hr>
@@ -46,17 +45,8 @@
                 Continue <i class="fas fa-sign-in-alt"></i>
             </button>
         </form>
-
-        <p>New to WamieCrafts?
-            <a href="#" class="forgotten-password">
-                <i class="fa fa-arrow-right"></i> Register
-            </a>
-        </p>
-
     </div>
 </main>
-
-
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const link = document.querySelector('.forgot-password'); // target by class

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Testimonials</title>
+
+    <!-- CSS Links -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_forms.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Google Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body style="margin:5px;">
+    <div class="admin-container">
+        <!-- Testimonial Management Section -->
+        <section class="testimonial-management">
+            <h2>Manage Testimonials</h2>
+
+            <div class="wrap-items">
+                <!-- Back to Admin Dashboard Link -->
+                <div class="back-to-dashboard">
+                    <a href="{{ url_for('admin.admin_dashboard') }}" class="back-link">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+            </div>
+
+            <!-- Display Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% endwith %}
+
+            <!-- Testimonials Table -->
+            <table class="testimonial-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Client Name</th>
+                        <th>Client Picture</th>
+                        <th>Workplace</th>
+                        <th>Position</th>
+                        <th>Project Worked On</th>
+                        <th>Testimonial</th>
+                        <th>Date Added</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for testimonial in testimonial %}
+                    <tr>
+                        <td>{{ testimonial[0] }}</td>
+                        <td>{{ testimonial[1] }}</td>
+                        <td><img src="{{ url_for('static', filename=testimonial[2])}}" alt="Client-img" style="width:50px;height:50px;"></td>
+                        <td>{{ testimonial[3] }}</td>
+                        <td>{{ testimonial[4] }}</td>
+                        <td>{{ testimonial[5] }}</td>
+                        <td>{{ testimonial[6] }}</td>
+                        <td>{{ testimonial[7] }}</td>
+                        <td class="action">
+                            <!-- Edit Action -->
+                            <button class="edit-btn" data-id="{{ testimonial[0] }}" data-name="{{ testimonial[1] }}" 
+                                data-picture="{{ testimonial[2] }}" data-workplace="{{ testimonial[3] }}" 
+                                data-position="{{ testimonial[4] }}" data-project="{{ testimonial[5] }}" 
+                                data-testimonial="{{ testimonial[6] }}" data-date="{{ testimonial[7] }}">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <!-- Delete Action -->
+                            <button class="delete-btn" data-id="{{ testimonial[0] }}" onclick="openDeleteModal('{{ testimonial[0] }}')">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- Update Testimonial Form Modal -->
+    <div id="update-testimonial-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 class="form-title">Edit Testimonial</h2>
+
+            <form action="{{ url_for('admin.update_testimonial') }}" method="POST" class="form" enctype="multipart/form-data">
+                <input type="hidden" name="testimonial_id" id="testimonial-id">
+
+                <!-- Client Name Field -->
+                <div class="form-group">
+                    <label class="form-label" for="client-name">Client Name</label>
+                    <input type="text" name="client_name" id="client-name" class="form-input" required>
+                </div>
+
+                <!-- Client Picture Field -->
+                <div class="form-group">
+                    <label class="form-label" for="client-picture">Client Picture</label>
+                    <input type="file" name="client_picture" id="client-picture" class="form-input">
+                    <div>
+                        <img id="image-preview" src="" alt="Current_img" style="max-width: 100px; display: none;">
+                    </div>
+                </div>
+
+                <!-- Workplace Field -->
+                <div class="form-group">
+                    <label class="form-label" for="client-workplace">Workplace</label>
+                    <input type="text" name="workplace" id="client-workplace" class="form-input" required>
+                </div>
+
+                <!-- Position Field -->
+                <div class="form-group">
+                    <label class="form-label" for="client-position">Position</label>
+                    <input type="text" name="position" id="client-position" class="form-input" required>
+                </div>
+
+                <!-- Project Field -->
+                <div class="form-group">
+                    <label class="form-label" for="project-name">Project</label>
+                    <input type="text" name="project_name" id="project-name" class="form-input" required>
+                </div>
+
+                <!-- Testimonial Text -->
+                <div class="form-group">
+                    <label class="form-label" for="testimonial-text">Testimonial</label>
+                    <textarea name="testimonial_text" id="testimonial-text" class="form-input" rows="4" required></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="form-button">Update</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Testimonial Modal -->
+    <div id="delete-testimonial-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 class="form-title">Confirm Delete</h2>
+            <p>Are you sure you want to delete this testimonial?</p>
+            <form action="{{ url_for('admin.delete_testimonial') }}" method="POST" class="form">
+                <input type="hidden" name="testimonial_id" id="delete-testimonial-id">
+                <button type="submit" class="form-button danger">Delete</button>
+                <br><br>
+                <button type="button" class="form-button" onclick="closeDeleteModal()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                const name = this.getAttribute('data-name');
+                const picture = this.getAttribute('data-picture');
+                const workplace = this.getAttribute('data-workplace');
+                const position = this.getAttribute('data-position');
+                const project = this.getAttribute('data-project');
+                const testimonial = this.getAttribute('data-testimonial');
+                const date = this.getAttribute('data-date');
+
+                // Set values in the update form
+                document.getElementById('testimonial-id').value = id;
+                document.getElementById('client-name').value = name;
+                document.getElementById('client-workplace').value = workplace;
+                document.getElementById('client-position').value = position;
+                document.getElementById('project-name').value = project;
+                document.getElementById('testimonial-text').value = testimonial;
+
+                // Display the current image in the modal
+                const imagePreview = document.getElementById('image-preview');
+                if (picture) {
+                    imagePreview.src = picture;
+                    imagePreview.style.display = 'block';
+                } else {
+                    imagePreview.style.display = 'none';
+                }
+
+                // Open the modal
+                document.getElementById('update-testimonial-modal').style.display = 'block';
+            });
+        });
+
+        // Close modal functionality
+        document.querySelectorAll('.close-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.getElementById('update-testimonial-modal').style.display = 'none';
+                document.getElementById('delete-testimonial-modal').style.display = 'none';
+            });
+        });
+
+        function openDeleteModal(id) {
+            document.getElementById('delete-testimonial-id').value = id;
+            document.getElementById('delete-testimonial-modal').style.display = 'block';
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('delete-testimonial-modal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

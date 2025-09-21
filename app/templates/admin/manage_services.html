@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Services</title>
+
+    <!-- CSS Links -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_forms.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">
+     <!-- Link for Google Material Icons -->
+     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+ 
+
+      <!--link to font family-->
+      <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+  
+</head>
+<body style="margin:5px;">
+    <div class="admin-container">
+        <!-- Service Management Section -->
+        <section class="service-management">
+            <h2>Service Management</h2>
+
+            <div class="wrap-items">
+                <!-- Back to Admin Dashboard Link -->
+                <div class="back-to-dashboard">
+                    <a href="{{ url_for('admin.admin_dashboard') }}" class="back-link">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+
+                <!-- Search Services -->
+                <div class="service-search-bar">
+                    <form method="GET">
+                        <input type="text" id="search-bar" name="search" placeholder="Search services by name or price...">
+                        <button type="submit" class="search-btn">Search</button>
+                    </form>
+                </div>
+            </div>
+           
+                <!-- Add Service Button -->
+        <div class="add-button" style="text-align: center;">
+            <button class="add-btn" id="add-service-btn"><i class="fas fa-plus"></i> Add Service</button>
+        </div>
+           
+
+            <!-- Display Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% endwith %}
+
+            <!-- Services Table -->
+            <table class="service-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Service Name</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for service in services %}
+                    <tr>
+                        <td>{{ service[0] }}</td>
+                        <td>{{ service[1] }}</td>
+                        <td>{{ service[2] }}</td>
+                        <td>{{ service[3] }}</td>
+                        <td class="action">
+                            <!-- Edit Action -->
+                            <button class="edit-btn" data-id="{{ service[0] }}" data-name="{{ service[1] }}" data-description="{{ service[2] }}" 
+                                data-price="{{ service[3] }}">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <!-- Delete Action -->
+                            <button class="delete-btn" data-id="{{ service[0] }}" onclick="openDeleteModal('{{ service[0] }}')">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+
+<!-- Add Service Modal -->
+<div id="add-service-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2 class="form-title">Add New Service</h2>
+
+        <form action="{{ url_for('admin.add_service') }}" method="POST" class="form">
+            <!-- Service Name Field -->
+            <div class="form-group">
+                <label class="form-label" for="add-service-name">Service Name</label>
+                <input type="text" name="service_name" id="add-service-name" class="form-input" required>
+            </div>
+
+            <!-- Description Field -->
+            <div class="form-group">
+                <label class="form-label" for="add-service-description">Description</label>
+                <textarea name="service_description" id="add-service-description" class="form-input" required></textarea>
+            </div>
+
+            <!-- Price Field -->
+            <div class="form-group">
+                <label class="form-label" for="add-service-price">Price</label>
+                <input type="number" name="service_price" id="add-service-price" class="form-input" required>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="form-button">Add Service</button>
+        </form>
+    </div>
+</div>
+
+
+    <!-- Update Service Form Modal -->
+    <div id="update-service-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 class="form-title">Edit Service</h2>
+    
+            <form action="{{ url_for('admin.update_service') }}" method="POST" class="form">
+                <input type="hidden" name="service_id" id="service-id">
+    
+                <!-- Service Name Field -->
+                <div class="form-group">
+                    <label class="form-label" for="edit-service-name">Service Name</label>
+                    <input type="text" name="service_name" id="edit-service-name" class="form-input" required>
+                </div>
+    
+                <!-- Description Field -->
+                <div class="form-group">
+                    <label class="form-label" for="edit-service-description">Description</label>
+                    <textarea name="service_description" id="edit-service-description" class="form-input" required></textarea>
+                </div>
+    
+                <!-- Price Field -->
+                <div class="form-group">
+                    <label class="form-label" for="edit-service-price">Price</label>
+                    <input type="number" name="service_price" id="edit-service-price" class="form-input" required>
+                </div>
+    
+                <!-- Submit Button -->
+                <button type="submit" class="form-button">Update</button>
+            </form>
+        </div>
+    </div>
+    
+
+    <!-- Delete Service Modal -->
+    <div id="delete-service-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 class="form-title">Confirm Delete</h2>
+            <p>Are you sure you want to delete this service?</p>
+            <form action="{{ url_for('admin.delete_service') }}" method="POST" class="form">
+                <input type="hidden" name="service_id" id="delete-service-id">
+                <button type="submit" class="form-button danger">Delete</button> <br><br><hr><hr><br>
+                <button type="button" class="form-button" onclick="closeDeleteModal()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Open Add Service Modal
+        document.getElementById('add-service-btn').addEventListener('click', function() {
+            document.getElementById('add-service-modal').style.display = 'block';
+        });
+    
+        // Close Modal Functions
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+    
+        document.querySelectorAll('.close-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                closeModal('add-service-modal');
+                closeModal('update-service-modal');
+                closeModal('delete-service-modal');
+            });
+        });
+    
+        // Close the modal if clicked outside
+        window.addEventListener('click', function(event) {
+            const addServiceModal = document.getElementById('add-service-modal');
+            const updateServiceModal = document.getElementById('update-service-modal');
+            if (event.target === addServiceModal || event.target === updateServiceModal) {
+                closeModal('add-service-modal');
+                closeModal('update-service-modal');
+            }
+        });
+    
+        // Edit Service Modal Functionality
+        document.querySelectorAll('.edit-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const serviceId = this.getAttribute('data-id');
+        const serviceName = this.getAttribute('data-name');
+        const serviceDescription = this.getAttribute('data-description');
+        const servicePrice = this.getAttribute('data-price');
+
+        // Populate the form for editing
+        document.getElementById('service-id').value = serviceId;
+        document.getElementById('edit-service-name').value = serviceName;
+        document.getElementById('edit-service-description').value = serviceDescription;
+        document.getElementById('edit-service-price').value = servicePrice;
+
+        // Show the modal
+        document.getElementById('update-service-modal').style.display = 'block';
+    });
+});
+
+// Opening and closing modals (unchanged)
+
+        // Open Delete Service Modal
+        function openDeleteModal(serviceId) {
+            document.getElementById('delete-service-id').value = serviceId;
+            document.getElementById('delete-service-modal').style.display = 'block';
+        }
+    
+        // Close Delete Modal
+        function closeDeleteModal() {
+            document.getElementById('delete-service-modal').style.display = 'none';
+        }
+    </script>
+    
+</body>
+</html>

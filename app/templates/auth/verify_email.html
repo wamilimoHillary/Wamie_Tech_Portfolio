@@ -1,0 +1,28 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+{% block head %}
+    <!-- Extend the styles in the base template -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/verify_email.css') }}">
+{% endblock %}
+<main class="container">
+    <div class="content">
+         <!-- Display Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %} 
+
+
+        <!-- Button to Login -->
+        <a href="{{ url_for('auth.login') }}" class="btn">Login</a>
+    </div>
+</main>
+{% endblock %}

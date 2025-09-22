@@ -1,0 +1,43 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+{% block head %}
+    <!-- Link to login-specific CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">
+{% endblock %}
+
+<main>
+    <div class="login-container">
+        <h2>Reset Password</h2>
+    
+        <p class="description">Enter your registered email address. A link will be sent to your email to reset your password. Please follow the link to complete the process.</p>
+        
+        <form action="{{ url_for('auth.forgot_password', token=token) }}" method="post">
+            <div class="input-group">
+                <input type="email" name="email" id="email" placeholder=" " required>
+                <label for="email">Enter your email</label>
+            </div>
+
+     <!-- Display Flash Messages -->
+     {% with messages = get_flashed_messages(with_categories=true) %}
+     {% if messages %}
+         <div class="flash-messages">
+             {% for category, message in messages %}
+                 <div class="flash {{ category }}">{{ message }}</div>
+             {% endfor %}
+         </div>
+     {% endif %}
+     {% endwith %}  
+     
+
+
+            <button type="submit" class="login-button">Send Reset Link</button>
+        </form>
+        <div class="new-account">
+            <a href="{{ url_for('auth.login') }}">Back to Login</a>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

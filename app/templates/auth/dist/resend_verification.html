@@ -1,0 +1,52 @@
+{% extends "main/base.html" %}
+
+{% block title %}Resend Verification - WamieCrafts{% endblock %}
+
+{% block content %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">
+{% endblock %}
+
+<main class="student_main"> <!-- Same wrapper as login/signup -->
+    <div class="form-container"> <!-- Consistent styled container -->
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+
+        <h2>Quickly Verify Email</h2>
+        <p class="form-subtitle">Enter your email and click the button below</p>
+
+        <!-- Resend Verification Form -->
+        <form method="post">
+            <div class="input-group">
+                <input type="email" id="email" name="email" placeholder=" " required>
+                <label for="email"><i class="fa fa-envelope"></i> *My Email</label>
+            </div>
+
+            <hr>
+
+            <button type="submit" class="form-button">
+                Resend Verification Link <i class="fa fa-paper-plane"></i>
+            </button>
+        </form>
+
+        <p>Back to 
+            <a href="{{ url_for('auth.login') }}">
+                <i class="fa fa-arrow-left"></i> Login
+            </a>
+        </p>
+
+    </div>
+</main>
+
+{% endblock %}

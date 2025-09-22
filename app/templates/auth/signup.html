@@ -1,0 +1,106 @@
+{% extends "main/base.html" %}
+
+{% block title %}Signup - WamieCrafts{% endblock %}
+
+{% block content %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">
+{% endblock %}
+
+<main class="student_main"> <!-- Same background wrapper as login -->
+    <div class="form-container"> <!-- Same container as login -->
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+
+        <h2>Create an Account</h2>
+
+        <!-- Signup Form -->
+        <form id="signup-form" action="{{ url_for('auth.signup') }}" method="POST" onsubmit="return checkPasswordMatch()">
+            
+            <div class="input-group">
+                <input type="text" id="username" name="username" placeholder=" " required>
+                <label for="username"><i class="fa fa-user"></i> *Username</label>
+            </div>
+
+            <div class="input-group">
+                <input type="email" id="email" name="email" placeholder=" " required>
+                <label for="email"><i class="fa fa-envelope"></i> *Email</label>
+            </div>
+
+            <div class="input-group">
+                <input type="tel" id="phone" name="phone" placeholder=" " required>
+                <label for="phone"><i class="fa fa-phone"></i> *Phone Number</label>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="password" name="password" placeholder=" " required>
+                <label for="password"><i class="fa fa-lock"></i> *Password</label>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="confirm_password" name="confirm_password" placeholder=" " required>
+                <label for="confirm_password"><i class="fa fa-lock"></i> *Confirm Password</label>
+            </div>
+
+            <div class="remember-forget-container">
+                <div class="checkbox-container">
+                    <input type="checkbox" name="remember_me" required>
+                    <p>Agree to Terms</p>
+                </div>
+                <a href="{{ url_for('main.help') }}" id="forgot-password-link">
+                    <i class="fa fa-file-contract"></i> Terms & Conditions
+                </a>
+            </div>
+
+            <hr>
+
+            <button type="submit" class="form-button">
+                Complete Registration <i class="fas fa-user-plus"></i>
+            </button>
+        </form>
+
+        <p>Already have an account?
+            <a href="{{ url_for('auth.login') }}">
+                <i class="fa fa-arrow-left"></i> Login
+            </a>
+        </p>
+
+    </div>
+</main>
+
+<script>
+function checkPasswordMatch() {
+    var password = document.getElementById("password").value;
+    var confirmPassword = document.getElementById("confirm_password").value;
+
+    if (password !== confirmPassword) {
+        alert("Passwords do not match!");
+        return false;
+    }
+    return true;
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const link = document.getElementById('forgot-password-link');
+    if (link) {
+        function startShake() {
+            link.classList.add('shake');
+            setTimeout(() => link.classList.remove('shake'), 500);
+        }
+        setInterval(startShake, 3000);
+    }
+});
+</script>
+
+{% endblock %}

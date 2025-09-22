@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>users Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+</head>
+<body>
+    <header class="header">
+        <button id="toggle-sidebar" class="menu-btn"><i class="fas fa-bars"></i></button>
+        <a href="{{ url_for('user.user_logout') }}" id="logout-btn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> LogOut</a>
+    </header>
+
+    <aside id="sidebar" class="sidebar">
+        <nav>
+            <a href="#" class="nav-link" data-modal="manage-profile-modal"><i class="fas fa-user"></i> Profile &nbsp; <i class="fas fa-arrow-right"></i></a>
+            <a href="#" class="nav-link" data-modal="Book-Service"> <i class="fas fa-calendar-check"></i> Book a Service</a>
+            <a href="#" class="nav-link" data-modal="Manage-Payments"><i class="fas fa-money-bill-wave"></i> Manage Payments</a>
+            <a href="#" class="nav-link" data-modal="Balance-Summary"><i class="fas fa-wallet"></i> Balance Summary</a>
+            <a href="#" class="nav-link" data-modal="Assignments_Projects"><i class="fas fa-tasks"></i> Assignments & Projects</a>
+            <a href="#" class="nav-link" data-modal="AI-Assistant"><i class="fas fa-robot"></i> AI Assistant</a>
+            <a href="#" class="nav-link" data-modal="Notifications"><i class="fas fa-bell"></i> Notifications</a>       
+        </nav>
+    </aside>
+
+    
+    <!-- sidebar Modals -->
+     <!--profile modal-->
+     <div id="manage-profile-modal" class="modal">
+        <div class="modal-content">
+          <span class="close-btn">&times;</span>
+          <h2>Manage Profile</h2>
+            <h3>Email:jkrmlelfw;lerkrffr</h3>
+            <p>phone:jnknmfawljnwejnqjk</p>  <br> <hr> <br>
+            <!--to be implemented-->
+            <button class="edit-btn"><i class="fas fa-edit"></i> Edit</button>
+        </div>
+      </div>
+    <!--book a service modal -->
+    <div id="Book-Service" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Book a Service</h2>
+            <!--to be implemented-->
+        </div>
+    </div>
+<!--manage-payment modal-->
+    <div id="Manage-Payments" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2> Manage-Payments</h2>
+            <!--to be implemented-->
+        </div>
+    </div>
+    <!--Balance-Summary modal-->
+    <div id="Balance-Summary" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Balance-Summary</h2>
+            <!--to be implemented here-->
+        </div>
+    </div>
+<!--Assignments_Projects modal-->
+    <div id="Assignments_Projects" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Assignments_Projects</h2>
+<!--to be implemented-->
+        </div>
+    </div>
+    <!--AI-Assistant modal-->
+    <div id="AI-Assistant" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2><i class="fas fa-robot"></i>AI-Assistant </h2>
+            To be  implemented
+<!--to be implemented-->
+        </div>
+    </div>
+    <!--NOTIFICATIONS modal-->
+    <div id="Notifications" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2><i class="fas fa-bell"></i>Your Notifications will be seen here</h2>
+<!--to be implemented-->
+        </div>
+    </div>
+
+     <!--feedback modal-->
+     <div id="feedback-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2><i class="fas fa-comment-dots"></i>Please leave your testimonial</h2>
+<!--to be implemented-->
+        </div>
+    </div>
+
+
+    <main class="main-content">
+        
+           <!-- Display Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}  
+    <h1>Welcome, {USER! Name} to your Personalized Metrics</h1>
+
+    <section class="dashboard-cards">
+        <!-- Bookings Card -->
+        <div class="card">
+            <i class="fas fa-calendar-check"></i>
+            <h3>Active Bookings</h3>
+            <p>3 Upcoming</p>
+            <a href="#" class="nav-link" data-modal="Book-Service"><i class="fas fa-calendar-plus"></i> Book Now</a>
+        </div>
+    
+        <!-- Payment Status Card -->
+        <div class="card">
+            <i class="fas fa-wallet"></i>
+            <h3>Pending Balance</h3>
+            <p>$250</p>
+            <a href="#" class="nav-link" data-modal="Manage-Payments"><i class="fas fa-money-bill-wave"></i> Pay Now</a>
+        </div>
+    
+        <!-- Completed Services Card -->
+        <div class="card">
+            <i class="fas fa-check-circle"></i>
+            <h3>Completed Services</h3>
+            <p>5</p>
+            <a href="#" class="nav-link" data-modal="Assignments_Projects"><i class="fas fa-tasks"></i> View History</a>
+        </div>
+    
+        <!-- Notifications Card -->
+        <div class="card">
+            <i class="fas fa-bell"></i>
+            <h3>Notifications</h3>
+            <p>3 New Updates</p>
+            <a href="#" class="nav-link" data-modal="Notifications"><i class="fas fa-bell"></i> View All</a>
+        </div>
+    </section>
+
+        <section class="analytics">
+            <h2>Analytics Overview</h2>
+            <div class="analytics-content">
+                <p>Placeholder for analytics charts and graphs. You can integrate tools like Chart.js here.</p>
+            </div>
+            <h3>Your Feedback</h3> <br>
+<a href="#" class="nav-link" data-modal="feedback-modal" style="text-decoration: none;padding: 10px; background: var(--accent-color); border-radius: 7px; margin: 10px;color: var(--text-color);"><i class="fas fa-comment-dots"></i> Leave a testimonial</a>
+
+        </section>
+    </main>
+    
+    <script src="{{ url_for('static', filename='js/admin_dashboard.js') }}"></script>
+</body>
+</html>

@@ -10,6 +10,7 @@ main {
     min-height: 70vh;
     background: var(--bg2-color);
     width: 100%;
+    
    
 }
 
@@ -17,6 +18,7 @@ main {
 .student_main {
     background: url('../images/wamie.jpg') no-repeat center/cover;
     background-position: 100%;
+    padding: 5px;
 }
 
 /* =============================
@@ -222,4 +224,11 @@ input:focus::placeholder {
     .forgot-password {
         font-size: 12px;
     }
+}
+
+
+@media (max-width: 215px) {
+*{
+    font-size: 9px !important;
+}
 }

@@ -7,6 +7,7 @@
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/flash_errors.css') }}">
 {% endblock %}
 
 <main class="student_main"> <!-- Same background wrapper as login -->
@@ -53,12 +54,12 @@
                 <label for="confirm_password"><i class="fa fa-lock"></i> *Confirm Password</label>
             </div>
 
-            <div class="remember-forget-container">
-                <div class="checkbox-container">
-                    <input type="checkbox" name="remember_me" required>
-                    <p>Agree to Terms</p>
-                </div>
-                <a href="{{ url_for('main.help') }}" id="forgot-password-link">
+            <div style="display: flex; flex-direction: row;align-items: center;">
+    
+                    <input type="checkbox" name="remember_me" required style="width: 20px;height: 20px;">
+                    <p></p>Agree To:</p>
+                
+                <a href="{{ url_for('main.help') }}" id="forgot-password-link" style="margin-left:auto;color:rgb(53, 215, 255);font-weight: bolder;">
                     <i class="fa fa-file-contract"></i> Terms & Conditions
                 </a>
             </div>
@@ -71,8 +72,8 @@
         </form>
 
         <p>Already have an account?
-            <a href="{{ url_for('auth.login') }}">
-                <i class="fa fa-arrow-left"></i> Login
+            <a href="{{ url_for('auth.login') }}" style="margin-left:auto;color:rgb(53, 215, 255); font-weight: bolder;;text-decoration: none;">
+                <i class="fa fa-arrow-right"></i> Login
             </a>
         </p>
 

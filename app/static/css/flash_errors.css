@@ -1,0 +1,45 @@
+/* ================
+   FLASH MESSAGES
+   ================ */
+.flash-messages {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.flash {
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 500;
+  color: #fff;
+  margin-bottom: 10px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  animation: fadeIn 0.5s ease;
+}
+
+/* Red = Error / Danger */
+.flash.error,
+.flash.danger {
+  background-color: #ff1427; /* soft red */
+  border-left: 5px solid #ffffff;
+}
+
+/* Green = Success */
+.flash.success {
+  background-color: #05600e; /* fresh green */
+  border-left: 5px solid #ffffff;
+}
+
+/* Yellow = Warning */
+.flash.warning {
+  background-color: #f1c40f; /* warm yellow */
+  color: #333;
+  border-left: 5px solid #f39c12;
+}
+
+/* Blue = Info (optional) */
+.flash.info {
+  background-color: #3498db;
+  border-left: 5px solid #1e88e5;
+}
+
+

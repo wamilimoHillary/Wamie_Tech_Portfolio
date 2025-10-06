@@ -150,54 +150,6 @@ input:focus::placeholder {
 
 
 /* =============================
-   FLASH MESSAGES
-   ============================= */
-.flash-messages {
-    width: 90%;
-    max-width: 400px;
-    z-index: 1000;
-    text-align: center;
-    margin: 0 auto 15px;
-}
-
-.flash {
-    padding: 12px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    font-weight: bold;
-    color: #fff;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-    opacity: 0.95;
-    animation: fadeOut 15s ease-in-out forwards;
-}
-
-/* Flash Types */
-.flash.success { background: var(--bg-success); }
-.flash.danger  { background: var(--bg-danger); }
-.flash.warning { background: #ffc107; color: #333; }
-.flash.info    { background: #17a2b8; }
-
-.flash:hover { opacity: 1; }
-
-/* =============================
-   ANIMATIONS
-   ============================= */
-@keyframes shake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-6px); }
-    50% { transform: translateX(6px); }
-    75% { transform: translateX(-6px); }
-    100% { transform: translateX(0); }
-}
-
-.shake { animation: shake 0.5s; }
-
-@keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
-}
-
-/* =============================
    RESPONSIVE DESIGN
    ============================= */
 @media (max-width: 480px) {

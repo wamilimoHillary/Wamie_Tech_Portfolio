@@ -1,19 +1,16 @@
 from flask import Flask, render_template
-from flask_mysqldb import MySQL  # type:ignore
 from flask_mail import Mail
-from psycopg2 import OperationalError  # if you're using psycopg2 in database.py
+from psycopg2 import OperationalError  # For handling PostgreSQL connection errors
 
-mysql = MySQL()
 mail = Mail()
 
 def create_app():
     app = Flask(__name__)
 
-    # Load configurations
+    # Load configurations (includes your Supabase/PostgreSQL settings)
     app.config.from_object('app.config.Config')
 
-    # Initialize extensions
-    mysql.init_app(app)
+    # Initialize Flask-Mail
     mail.init_app(app)
 
     # Register blueprints
@@ -39,19 +36,25 @@ def create_app():
     # 🔴 GLOBAL ERROR HANDLERS
     # ============================
 
-    # Handles your raised ConnectionError from database.py
+    # Handle custom ConnectionError from database.py
     @app.errorhandler(ConnectionError)
     def handle_connection_error(e):
         return render_template('errors/db_error.html', message=str(e)), 503
 
-    # Handles psycopg2 or MySQL operational failures (optional safety net)
+    # Handle PostgreSQL OperationalError (Supabase connection issues)
     @app.errorhandler(OperationalError)
     def handle_operational_error(e):
-        return render_template('errors/db_error.html', message="Database connection failed. Please try again later."), 503
+        return render_template(
+            'errors/db_error.html',
+            message="Database connection failed. Please check your internet or try again later."
+        ), 503
 
-    # Handles any other unexpected server errors
+    # Handle unexpected internal server errors
     @app.errorhandler(500)
     def handle_internal_error(e):
-        return render_template('errors/db_error.html', message="An unexpected error occurred. Please try again later."), 500
+        return render_template(
+            'errors/db_error.html',
+            message="An unexpected server error occurred. Please try again later."
+        ), 500
 
     return app

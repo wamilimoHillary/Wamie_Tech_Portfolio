@@ -9,6 +9,7 @@ from app.config import Config
 from app.database import get_db_connection
 from app.utils.helpers import generate_token, get_token_expiry
 from app.email_config import EmailConfig
+from app.utils.token_utils import generate_reset_token, get_reset_expiry
 
 # Initialize Blueprint
 auth = Blueprint('auth', __name__)
@@ -287,3 +288,261 @@ def admin_logout():
     session.pop('admin_id', None)  # Remove admin from session
     flash("Logged out successfully.", "success")
     return redirect(url_for('auth.admin_login'))
+
+
+# ==============================================
+# Route: Forgot Password
+# Purpose: Handles password reset requests.
+#  - User enters their registered email.
+#  - If found, a secure reset token and expiry are generated.
+#  - A reset link is emailed to the user.
+#  - The link directs to the password reset page to set a new password.
+# ==============================================
+
+@auth.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email = request.form.get('email', '').strip().lower()
+        if not email:
+            flash("Please enter your email.", "warning")
+            return redirect(url_for('auth.forgot_password'))
+
+        conn = get_db_connection()
+        cur = conn.cursor()
+        try:
+            cur.execute("SELECT id, is_active FROM users WHERE email = %s", (email,))
+            user = cur.fetchone()
+
+            # Security note: Do not reveal existence. We'll still update/send only if exists
+            if user:
+                reset_token = generate_reset_token()
+                reset_expiry = get_reset_expiry(hours=1)  # 1 hour expiry
+
+                cur.execute("""
+                    UPDATE users SET reset_token = %s, reset_expiry = %s WHERE email = %s
+                """, (reset_token, reset_expiry, email))
+                conn.commit()
+
+                reset_link = url_for('auth.reset_password', token=reset_token, _external=True)
+
+                # Prepare and send email
+                msg = Message(
+                    subject="WamieTech — Password Reset",
+                    sender=EmailConfig.MAIL_DEFAULT_SENDER,
+                    recipients=[email]
+                )
+                msg.html = f"""
+                <html>
+                <body style="font-family: Arial, sans-serif; color: #333;">
+                  <h2>Password Reset Request</h2>
+                  <p>We received a request to reset the password for this email.</p>
+                  <p><a href="{reset_link}" style="display:inline-block;padding:10px 18px;
+                    background:#007bff;color:#fff;text-decoration:none;border-radius:5px;">
+                    Reset Password</a></p>
+                  <p>This link expires in 1 hour. If you didn't request this, ignore this email.</p>
+                  <p>— WamieTech Team</p>
+                </body>
+                </html>
+                """
+
+                try:
+                    mail.send(msg)
+                except Exception as e:
+                    # Mail failed — log on server and notify user but do not expose details
+                    print("Mail send error:", e)
+                    flash("If your email is registered, a reset link has been sent (mail delivery failed, logged).", "info")
+                    cur.close()
+                    conn.close()
+                    return redirect(url_for('auth.login'))
+
+            # Generic message (do not leak whether email exists)
+            flash("If the email is registered, you will receive a password reset link shortly.", "info")
+            return redirect(url_for('auth.login'))
+
+        finally:
+            cur.close()
+            conn.close()
+
+    # GET - render request form
+    return render_template('auth/request_reset.html')
+
+
+# ==============================================
+# Route: Reset Password
+# Purpose: Allows users to set a new password.
+#  - Triggered when the user clicks the reset link in their email.
+#  - Verifies the validity and expiry of the reset token.
+#  - Updates the user’s password if valid, then clears the token.
+#  - Displays success or error messages accordingly.
+# ==============================================
+
+@auth.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    # Validate token existence and expiry
+    conn = get_db_connection()
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT email, reset_expiry FROM users WHERE reset_token = %s", (token,))
+        row = cur.fetchone()
+        if not row:
+            flash("Invalid or expired reset link.", "danger")
+            return redirect(url_for('auth.forgot_password'))
+
+        email, expiry = row
+        if not expiry or datetime.utcnow() > expiry:
+            flash("Reset link has expired. Please request a new one.", "warning")
+            # Clear token server-side if you like
+            cur.execute("UPDATE users SET reset_token = NULL, reset_expiry = NULL WHERE email = %s", (email,))
+            conn.commit()
+            return redirect(url_for('auth.forgot_password'))
+
+        if request.method == 'POST':
+            password = request.form.get('password', '')
+            confirm = request.form.get('confirm_password', '')
+            if not password or not confirm:
+                flash("Please fill out both fields.", "warning")
+                return redirect(url_for('auth.reset_password', token=token))
+            if password != confirm:
+                flash("Passwords do not match.", "danger")
+                return redirect(url_for('auth.reset_password', token=token))
+
+            hashed = generate_password_hash(password)
+            cur.execute("""
+                UPDATE users
+                SET password_hash = %s, reset_token = NULL, reset_expiry = NULL
+                WHERE email = %s
+            """, (hashed, email))
+            conn.commit()
+            flash("Your password has been reset. You can now log in.", "success")
+            return redirect(url_for('auth.login'))
+
+    finally:
+        cur.close()
+        conn.close()
+
+    # GET - show reset form
+    return render_template('auth/reset_password.html', token=token)
+
+
+
+# ==============================================
+# ADMIN PASSWORD RESET FLOW
+# ==============================================
+
+# ----------------------------------------------
+# Route: Admin Forgot Password
+# Purpose: Sends password reset email to admin
+# ----------------------------------------------
+@auth.route('/admin_forgot_password', methods=['GET', 'POST'])
+def admin_forgot_password():
+    if request.method == 'POST':
+        email = request.form.get('email', '').strip().lower()
+        if not email:
+            flash("Please enter your admin email.", "warning")
+            return redirect(url_for('auth.admin_forgot_password'))
+
+        conn = get_db_connection()
+        cur = conn.cursor()
+        try:
+            cur.execute("SELECT admin_id FROM admins WHERE email = %s", (email,))
+            admin = cur.fetchone()
+
+            # Even if not found, keep message generic
+            if admin:
+                reset_token = generate_reset_token()
+                reset_expiry = get_reset_expiry(hours=1)
+
+                cur.execute("""
+                    UPDATE admins
+                    SET reset_token = %s, reset_expiry = %s
+                    WHERE email = %s
+                """, (reset_token, reset_expiry, email))
+                conn.commit()
+
+                reset_link = url_for('auth.admin_reset_password', token=reset_token, _external=True)
+
+                # Send reset email
+                msg = Message(
+                    subject="WamieCrafts Admin Password Reset",
+                    sender=EmailConfig.MAIL_DEFAULT_SENDER,
+                    recipients=[email]
+                )
+                msg.html = f"""
+                <html>
+                <body style="font-family: Arial, sans-serif; color: #333;">
+                  <h2>Admin Password Reset Request</h2>
+                  <p>We received a request to reset your admin account password.</p>
+                  <p><a href="{reset_link}" 
+                        style="display:inline-block;padding:10px 18px;
+                        background:#007bff;color:#fff;text-decoration:none;
+                        border-radius:5px;">Reset Password</a></p>
+                  <p>This link expires in 1 hour. If you did not request this, ignore this email.</p>
+                  <p>— WamieCrafts Admin Team</p>
+                </body>
+                </html>
+                """
+                try:
+                    mail.send(msg)
+                except Exception as e:
+                    print("Admin mail send error:", e)
+                    flash("If the email is registered, a reset link has been sent (mail delivery failed, logged).", "info")
+                    return redirect(url_for('auth.admin_login'))
+
+            flash("If the admin email is registered, you will receive a reset link shortly.", "info")
+            return redirect(url_for('auth.admin_login'))
+
+        finally:
+            cur.close()
+            conn.close()
+
+    return render_template('auth/admin_request_reset.html')
+
+
+# ----------------------------------------------
+# Route: Admin Reset Password
+# Purpose: Allows admin to set a new password
+# ----------------------------------------------
+@auth.route('/admin_reset_password/<token>', methods=['GET', 'POST'])
+def admin_reset_password(token):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT email, reset_expiry FROM admins WHERE reset_token = %s", (token,))
+        row = cur.fetchone()
+        if not row:
+            flash("Invalid or expired reset link.", "danger")
+            return redirect(url_for('auth.admin_forgot_password'))
+
+        email, expiry = row
+        if not expiry or datetime.utcnow() > expiry:
+            flash("Reset link has expired. Please request a new one.", "warning")
+            cur.execute("UPDATE admins SET reset_token = NULL, reset_expiry = NULL WHERE email = %s", (email,))
+            conn.commit()
+            return redirect(url_for('auth.admin_forgot_password'))
+
+        if request.method == 'POST':
+            password = request.form.get('password', '')
+            confirm = request.form.get('confirm_password', '')
+            if not password or not confirm:
+                flash("Please fill out both fields.", "warning")
+                return redirect(url_for('auth.admin_reset_password', token=token))
+            if password != confirm:
+                flash("Passwords do not match.", "danger")
+                return redirect(url_for('auth.admin_reset_password', token=token))
+
+            hashed = generate_password_hash(password)
+            cur.execute("""
+                UPDATE admins
+                SET password_hash = %s, reset_token = NULL, reset_expiry = NULL
+                WHERE email = %s
+            """, (hashed, email))
+            conn.commit()
+
+            flash("Your password has been successfully reset. You can now log in.", "success")
+            return redirect(url_for('auth.admin_login'))
+
+    finally:
+        cur.close()
+        conn.close()
+
+    return render_template('auth/admin_reset_password.html', token=token)

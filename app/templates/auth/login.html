@@ -38,7 +38,7 @@
             </div>
 
             <div class="remember-forget-container">
-                <a href="#" class="forgot-password">
+                <a href="{{ url_for('auth.forgot_password') }}" class="forgot-password" id="forgot-password-link">
                     <i class="fa fa-key"></i>Forgot password?
                 </a>
             </div>
@@ -55,23 +55,21 @@
         </p>
 
     </div>
-</main>
 
+       <script>
+        document.addEventListener('DOMContentLoaded', function () {
+    const link = document.getElementById('forgot-password-link');
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const link = document.querySelector('.forgot-password'); // target by class
-
-    if (link) {
-        function startShake() {
-            link.classList.add('shake');
-            setTimeout(() => link.classList.remove('shake'), 500);
-        }
-
-        // Repeat every 3 seconds
-        setInterval(startShake, 3000);
+    function startShake() {
+        link.classList.add('shake'); // Add the shake class
+        setTimeout(() => link.classList.remove('shake'), 500); // Remove it after animation duration
     }
+
+    // Trigger the shake animation repeatedly every 3 seconds
+    setInterval(startShake, 3000);
 });
-</script>
+
+    </script>
+</main>
 
 {% endblock %}

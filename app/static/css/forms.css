@@ -148,6 +148,33 @@ input:focus::placeholder {
     font-size: x-small;
 }
 
+/* Shake Animation */
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20%, 60% {
+    transform: translateX(-5px);
+  }
+  40%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+.forgot-password.shake {
+  animation: shake 0.5s ease;
+}
+
+/* Optional: subtle highlight effect during shake */
+.forgot-password {
+  transition: color 0.3s ease;
+}
+
+.forgot-password.shake {
+  color: var(--accent-color, #ff6b6b); /* Use your theme color */
+}
+
+
 
 /* =============================
    RESPONSIVE DESIGN

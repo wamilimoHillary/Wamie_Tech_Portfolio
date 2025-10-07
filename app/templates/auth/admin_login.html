@@ -24,7 +24,7 @@
         {% endif %}
         {% endwith %}
 
-        <h2>Wamie_Tech</h2>
+        <h2>Wamie_Tech_Admin</h2>
 
         <form action="{{ url_for('auth.admin_login') }}" method="post">
             <div class="input-group">
@@ -37,7 +37,7 @@
             </div>
 
             <div class="remember-forget-container">
-                <a href="#" class="forgot-password">
+                <a href="{{ url_for('auth.admin_forgot_password') }}" class="forgot-password">
                     <i class="fa fa-key"></i> Forgot password?
                 </a>
             </div>

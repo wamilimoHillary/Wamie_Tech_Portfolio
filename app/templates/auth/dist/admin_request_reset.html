@@ -1,6 +1,6 @@
 {% extends "main/base.html" %}
 
-{% block title %}Reset Password - WamieCrafts{% endblock %}
+{% block title %}Admin Forgot Password - WamieCrafts{% endblock %}
 
 {% block content %}
 
@@ -10,10 +10,9 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/flash_errors.css') }}">
 {% endblock %}
 
-<main class="student_main"> <!-- Consistent main wrapper -->
-    <div class="form-container"> <!-- Shared form style container -->
+<main class="student_main">
+    <div class="form-container">
 
-        <!-- Flash Messages -->
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <div class="flash-messages">
@@ -24,16 +23,13 @@
         {% endif %}
         {% endwith %}
 
-        <h2>Reset Password</h2>
-        <p class="form-subtitle">
-            Enter your registered email below. We'll send a link to reset your password.
-        </p>
+        <h2>Admin Password Reset</h2>
+        <p class="form-subtitle">Enter your Email below to receive a reset link.</p>
 
-        <!-- Reset Password Form -->
-        <form method="post" action="{{ url_for('auth.forgot_password', token=token) }}">
+        <form method="POST">
             <div class="input-group">
                 <input type="email" name="email" id="email" placeholder=" " required>
-                <label for="email"><i class="fa fa-envelope"></i> *My Email</label>
+                <label for="email"><i class="fa fa-envelope"></i> *Admin Email</label>
             </div>
 
             <hr>
@@ -45,11 +41,10 @@
 
         <p>
             Back to 
-            <a href="{{ url_for('auth.login') }}">
-                <i class="fa fa-arrow-left"></i> Login
+            <a href="{{ url_for('auth.admin_login') }}">
+                <i class="fa fa-arrow-left"></i> Admin Login
             </a>
         </p>
     </div>
 </main>
-
 {% endblock %}

@@ -1,0 +1,117 @@
+<!-- templates/admin/admin_base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Dashboard - WamieTech{% endblock %}</title>
+
+    <!-- Font Awesome & Material Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">
+    {% block styles %}{% endblock %}
+
+    <!-- JS -->
+    <script src="{{ url_for('static', filename='js/student_base.js') }}" defer></script>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="dashboard-sidebar" id="sidebar">
+        <button id="close-btn" aria-label="Close">&times;</button>
+
+        <div class="sidebar-header">
+            <h2>WamieTech Admin</h2>
+        </div>
+
+        <nav>
+            <!-- Dashboard -->
+            <a href="{{ url_for('admin.admin_dashboard') }}" class="sidebar-link active">
+                <i class="fas fa-chart-line"></i> Dashboard
+            </a>
+            <hr>
+
+            <!-- Manage Users -->
+            <details class="sidebar-details">
+                <summary class="sidebar-summary">
+                    <i class="fas fa-users-cog"></i> Manage Users
+                </summary>
+                <div class="sidebar-dropdown">
+                    <a href="{{ url_for('admin.manage_users') }}" class="sidebar-link">
+                        <i class="fas fa-user"></i> All Users
+                    </a>
+                    <a href="{{ url_for('admin.manage_teams') }}" class="sidebar-link">
+                        <i class="fas fa-users"></i> Teams
+                    </a>
+                </div>
+            </details>
+
+            <hr>
+
+            <!-- Manage Projects -->
+            <a href="{{ url_for('admin.manage_projects') }}" class="sidebar-link">
+                <i class="fas fa-clipboard-list"></i> Projects
+            </a>
+
+            <!-- Manage Services -->
+            <a href="{{ url_for('admin.manage_services') }}" class="sidebar-link">
+                <i class="fas fa-cogs"></i> Services
+            </a>
+
+            <!-- Testimonials -->
+            <a href="{{ url_for('admin.manage_testimonials') }}" class="sidebar-link">
+                <i class="fas fa-comment-dots"></i> Testimonials
+            </a>
+
+            <!-- Analytics -->
+            <a href="#" class="sidebar-link">
+                <i class="fas fa-chart-pie"></i> Analytics
+            </a>
+
+            <!-- Notifications -->
+            <a href="#" class="sidebar-link">
+                <i class="fas fa-bell"></i> Notifications
+            </a>
+
+            <hr>
+
+            <!-- Logout -->
+            <a href="{{ url_for('auth.admin_logout') }}" class="sidebar-link">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Header -->
+    <header class="dashboard-header">
+        <button class="Hamburger-menu-btn" id="Hamburger-menu-btn" aria-label="Menu">&#9776;</button>
+        <h1>Welcome, Admin</h1>
+        <a href="{{ url_for('auth.admin_logout') }}" class="btn-logout">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+    </header>
+
+    <!-- Main Content -->
+    <main class="dashboard-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block admin_content %}{% endblock %}
+    </main>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

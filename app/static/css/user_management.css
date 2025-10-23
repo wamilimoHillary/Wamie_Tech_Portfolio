@@ -1,0 +1,213 @@
+/* ======================================================
+   USER MANAGEMENT DASHBOARD — CLEAN RESPONSIVE STYLE
+====================================================== */
+
+/* === LAYOUT === */
+.main-content {
+  margin-left: 250px;
+  padding: 30px 40px;
+  text-align: left;
+}
+
+/* ======================================================
+   SEARCH BAR
+====================================================== */
+.wrap-items {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 20px 0 30px;
+}
+
+.user-search-bar {
+  width: 100%;
+  max-width: 800px;
+  padding: 0 10px;
+}
+
+.user-search-bar form {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 50px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  padding: 5px 10px;
+  border: 1px solid var(--border-color);
+}
+
+.user-search-bar input[type="text"] {
+  flex: 1;
+  border: none;
+  background: #fff;
+  padding: 12px 16px;
+  font-size: 15px;
+  outline: none;
+  color: #333;
+  border-radius: 50px;
+}
+
+.user-search-bar input::placeholder {
+  color: #666;
+}
+
+.user-search-bar .search-btn {
+  background: var(--accent-color);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  padding: 10px 18px;
+  font-size: 14px;
+  border-radius: 50px;
+  transition: 0.3s;
+}
+
+.user-search-bar .search-btn:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+/* ======================================================
+   TABLE STYLES
+====================================================== */
+.user-management {
+  overflow-x: auto; /* ✅ Enables scroll on small screens */
+}
+
+.user-management table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  background: var(--bg2-color);
+  box-shadow: 0 2px 8px var(--box-shadow-color);
+  border: 1px solid var(--border-color);
+  min-width: 700px; /* keeps proper layout on mobile scroll */
+}
+
+.user-management th,
+.user-management td {
+  border: 1px solid var(--border-color);
+  padding: 12px;
+  text-align: left;
+}
+
+.user-management th {
+  background: var(--bg-color3);
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.user-management td {
+  background: var(--bg2-color);
+  color: var(--text-color3);
+}
+
+.user-management tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.user-management tr:hover {
+  background: rgba(255, 116, 9, 0.08);
+  transition: 0.3s ease;
+}
+
+/* ======================================================
+   ACTION BUTTONS
+====================================================== */
+.edit-btn, .delete-btn {
+  background: var(--accent-color);
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: 0.2s ease;
+}
+
+.edit-btn:hover, .delete-btn:hover {
+  opacity: 0.85;
+  transform: scale(1.03);
+}
+
+/* ======================================================
+   MODALS
+====================================================== */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  transition: opacity 0.3s ease;
+}
+.modal.show { display: flex; animation: fadeIn 0.25s ease; }
+
+.modal-content {
+  background: var(--bg2-color);
+  color: var(--text-color);
+  padding: 20px 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px var(--box-shadow-color);
+  width: 90%;
+  max-width: 420px;
+  position: relative;
+  animation: slideUp 0.25s ease;
+}
+
+.close-btn {
+  position: absolute;
+  top: 8px; right: 12px;
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  color: var(--text-color3);
+  cursor: pointer;
+}
+.close-btn:hover { color: var(--accent-color); }
+
+.form-input, .form-button {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+.form-button {
+  background: var(--accent-color);
+  border: none;
+  cursor: pointer;
+  transition: 0.25s;
+}
+.form-button:hover { opacity: 0.9; transform: scale(1.03); }
+.form-button.danger { background: red; }
+
+/* ======================================================
+   ANIMATIONS
+====================================================== */
+@keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+@keyframes slideUp { from {transform: translateY(20px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
+
+/* ======================================================
+   RESPONSIVE
+====================================================== */
+@media screen and (max-width: 768px) {
+  .main-content { margin-left: 0; padding: 15px; }
+
+  .wrap-items { margin: 15px 0 25px; }
+
+  .user-search-bar { max-width: 95%; }
+  .user-search-bar form { padding: 4px 6px; }
+  .user-search-bar input[type="text"] { font-size: 14px; padding: 10px 12px; }
+  .user-search-bar .search-btn { padding: 8px 14px; font-size: 13px; }
+
+  .user-management table {
+    font-size: 0.9rem;
+    min-width: 650px;
+  }
+
+  .modal-content { width: 95%; padding: 18px; }
+}

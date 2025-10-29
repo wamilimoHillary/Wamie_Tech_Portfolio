@@ -19,6 +19,41 @@
   margin: 20px 0 30px;
 }
 
+.add-btn-container {
+  display: flex;
+  justify-content: flex-start;
+  margin: 0;
+  padding: 0;
+}
+
+.add-btn {
+  background-color: #157903; /* modern green tone */
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.add-btn i {
+  font-size: 14px;
+}
+
+.add-btn:hover {
+  background-color: #16a085;
+  transform: translateY(-2px);
+}
+
+.add-btn:active {
+  transform: translateY(0);
+}
+
+
 .user-search-bar {
   width: 100%;
   max-width: 800px;
@@ -29,7 +64,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #fff;
+  background: #ffffff;
   border-radius: 50px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
   padding: 5px 10px;
@@ -92,9 +127,10 @@
 }
 
 .user-management th {
-  background: var(--bg-color3);
+  background: var(--accent-color);
   color: var(--text-color);
   font-weight: 600;
+  border:1px solid white;
 }
 
 .user-management td {
@@ -115,7 +151,7 @@
    ACTION BUTTONS
 ====================================================== */
 .edit-btn, .delete-btn {
-  background: var(--accent-color);
+  background:var(--flash-success-bg);
   color: #fff;
   border: none;
   padding: 6px 10px;
@@ -123,6 +159,10 @@
   cursor: pointer;
   font-size: 0.9rem;
   transition: 0.2s ease;
+}
+
+.delete-btn {
+  background:var(--flash-error-bg)
 }
 
 .edit-btn:hover, .delete-btn:hover {
@@ -195,7 +235,10 @@
    RESPONSIVE
 ====================================================== */
 @media screen and (max-width: 768px) {
-  .main-content { margin-left: 0; padding: 15px; }
+  .main-content { margin-left: 0;
+     padding: 15px; 
+    margin: auto;
+    }
 
   .wrap-items { margin: 15px 0 25px; }
 
@@ -210,4 +253,40 @@
   }
 
   .modal-content { width: 95%; padding: 18px; }
+}
+
+
+
+
+/* =============================
+   FLASH MESSAGES (Compact & Reusable)
+   ============================= */
+.flash-messages {
+  margin: 10px auto;
+  max-width: 600px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.flash {
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #fff;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Success, Error, Info, Warning states */
+.flash.success { background: #28a745; }   /* green */
+.flash.error   { background: #dc3545; }   /* red */
+.flash.info    { background: #007bff; }   /* blue */
+.flash.warning { background: #ffc107; color: #222; } /* yellow */
+
+/* Optional subtle fade-in */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
 }

@@ -24,22 +24,12 @@
       </div>
     </div>
 
-    <!-- Flash Messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    <div class="flash-messages">
-      {% for category, message in messages %}
-      <div class="flash {{ category }}">{{ message }}</div>
-      {% endfor %}
-    </div>
-    {% endif %}
-    {% endwith %}
-
+   
     <!-- Users Table -->
     <table class="user-table">
       <thead>
         <tr>
-          <th>ID</th>
+          <th>No</th>
           <th>Username</th>
           <th>Email</th>
           <th>Phone</th>
@@ -47,11 +37,11 @@
           <th>Created At</th>
           <th>Actions</th>
         </tr>
-      </thead>
+      </thead> 
       <tbody>
         {% for user in users %}
         <tr>
-          <td>{{ user[0] }}</td>
+          <td>{{ loop.index }}</td><!--Jinja’s built-in loop.index to generate row numbers starting from 1-->
           <td>{{ user[1] }}</td>
           <td>{{ user[2] }}</td>
           <td>{{ user[3] }}</td>
@@ -88,15 +78,15 @@
     <form action="{{ url_for('admin.update_user') }}" method="POST" class="form">
       <input type="hidden" name="user_id" id="user-id">
       <div class="form-group">
-        <label class="form-label" for="username">Username</label>
+        <label class="form-label" for="username">jkjlk;lkj</label>
         <input type="text" name="username" id="username" class="form-input" required>
       </div>
       <div class="form-group">
-        <label class="form-label" for="email">Email</label>
+        <label class="form-label" for="email"></label>
         <input type="email" name="email" id="email" class="form-input" required>
       </div>
       <div class="form-group">
-        <label class="form-label" for="phone">Phone</label>
+        <label class="form-label" for="phone"></label>
         <input type="text" name="phone" id="phone" class="form-input" required>
       </div>
       <div class="form-group">
@@ -158,5 +148,31 @@ window.addEventListener('click', e => {
     if (e.target === m) m.classList.remove('show');
   });
 });
+
+/* ==========================================================
+   🔍 Enhanced Instant JS Table Filter (Live Matching)
+   ========================================================== */
+const searchInput = document.getElementById('search-bar');
+const tableBody = document.querySelector('.user-table tbody');
+
+searchInput.addEventListener('input', function () {
+  const filter = this.value.trim().toLowerCase();
+  const rows = tableBody.querySelectorAll('tr');
+
+  rows.forEach(row => {
+    const cells = row.querySelectorAll('td');
+    let matchFound = false;
+
+    cells.forEach(cell => {
+      const cellText = cell.textContent.trim().toLowerCase();
+      if (cellText.includes(filter)) {
+        matchFound = true;
+      }
+    });
+
+    row.style.display = matchFound ? '' : 'none';
+  });
+});
 </script>
 {% endblock %}
+

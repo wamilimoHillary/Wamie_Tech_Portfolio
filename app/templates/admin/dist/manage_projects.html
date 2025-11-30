@@ -15,9 +15,9 @@
   <section class="user-management">
     <h2>Project Management</h2>
 
-<div class="add-btn-container">
-        <button id="add-project-btn" class="add-btn"><i class="fas fa-plus"></i> Add Project</button>
-      </div>
+    <div class="add-btn-container">
+      <button id="add-project-btn" class="add-btn"><i class="fas fa-plus"></i> Add Project</button>
+    </div>
 
     <div class="wrap-items">
       <div class="user-search-bar">
@@ -26,11 +26,8 @@
           <button type="submit" class="search-btn">Search</button>
         </form>
       </div>
-
-      
     </div>
 
-    <!-- Flash Messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     <div class="flash-messages">
@@ -41,137 +38,180 @@
     {% endif %}
     {% endwith %}
 
-    <!-- Projects Table -->
-    <table class="user-table">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>Project Name</th>
-          <th>Description</th>
-          <th>Status</th>
-          <th>Link</th>
-          <th>Created At</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for project in projects %}
-        <tr>
-          <td>{{ loop.index }}</td>
-          <td>{{ project[1] }}</td>
-          <td>{{ project[2] }}</td>
-          <td>{{ project[3] }}</td>
-          <td><a href="{{ project[4] }}" target="_blank">View</a></td>
-          <td>{{ project[5] }}</td>
-          <td class="action">
-            <button class="edit-btn"
-                    data-id="{{ project[0] }}"
-                    data-name="{{ project[1] }}"
-                    data-description="{{ project[2] }}"
-                    data-status="{{ project[3] }}"
-                    data-link="{{ project[4] }}">
-              <i class="fas fa-edit"></i> Edit
-            </button>
-            <button class="delete-btn"
-                    data-id="{{ project[0] }}"
-                    onclick="openDeleteModal('{{ project[0] }}')">
-              <i class="fas fa-trash"></i> Delete
-            </button>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <div class="user-table-wrapper">
+      <table class="user-table">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Project Name</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Link</th>
+            <th>Created At</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for project in projects %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ project[1] }}</td>
+            <td>{{ project[2] }}</td>
+            <td>{{ project[3] }}</td>
+            <td><a href="{{ project[4] }}" target="_blank">View</a></td>
+            <td>{{ project[5] }}</td>
+            <td class="action">
+              <button class="edit-btn"
+                data-id="{{ project[0] }}"
+                data-name="{{ project[1] }}"
+                data-description="{{ project[2] }}"
+                data-status="{{ project[3] }}"
+                data-link="{{ project[4] }}">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+
+              <button class="delete-btn"
+                data-id="{{ project[0] }}"
+                onclick="openDeleteModal('{{ project[0] }}')">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+
+      </table>
+    </div>
+
   </section>
 </div>
 
-<!-- Add Project Modal -->
+
+
+
+<!-- ===============================
+     ADD PROJECT MODAL (Fixed)
+================================= -->
 <div id="add-project-modal" class="modal">
   <div class="modal-content">
     <span class="close-btn">&times;</span>
+
     <h2 class="form-title">Add Project</h2>
+
     <form action="{{ url_for('admin.add_project') }}" method="POST" class="form">
+
       <div class="form-group">
-        <label class="form-label" for="add-project-name">Project Name</label>
-        <input type="text" name="project_name" id="add-project-name" class="form-input" required>
+        <input type="text" name="project_name" id="add-project-name" class="form-input" required placeholder=" ">
+        <label for="add-project-name" class="form-label">Project Name</label>
       </div>
+
       <div class="form-group">
-        <label class="form-label" for="add-project-description">Description</label>
-        <textarea name="project_description" id="add-project-description" class="form-input" required></textarea>
+        <textarea name="project_description" id="add-project-description" class="form-input" required placeholder=" "></textarea>
+        <label for="add-project-description" class="form-label">Description</label>
       </div>
+
       <div class="form-group">
-        <label class="form-label" for="add-project-status">Status</label>
         <select name="project_status" id="add-project-status" class="form-input" required>
+          <option value="" disabled selected hidden></option>
           <option value="Active">Active</option>
           <option value="Completed">Completed</option>
           <option value="Pending">Pending</option>
         </select>
+        <label for="add-project-status" class="form-label">Status</label>
       </div>
+
       <div class="form-group">
-        <label class="form-label" for="add-project-link">Project Link</label>
-        <input type="url" name="project_link" id="add-project-link" class="form-input">
+        <input type="url" name="project_link" id="add-project-link" class="form-input" placeholder=" ">
+        <label for="add-project-link" class="form-label">Project Link</label>
       </div>
+
       <button type="submit" class="form-button">Add Project</button>
     </form>
+
   </div>
 </div>
 
-<!-- Edit Project Modal -->
+
+
+
+<!-- ===============================
+     UPDATE PROJECT MODAL (Fixed)
+================================= -->
 <div id="update-project-modal" class="modal">
   <div class="modal-content">
     <span class="close-btn">&times;</span>
+
     <h2 class="form-title">Edit Project</h2>
+
     <form action="{{ url_for('admin.update_project') }}" method="POST" class="form">
+
       <input type="hidden" name="project_id" id="project-id">
+
       <div class="form-group">
-        <label class="form-label" for="project-name">Project Name</label>
-        <input type="text" name="project_name" id="project-name" class="form-input" required>
+        <input type="text" name="project_name" id="project-name" class="form-input" required placeholder=" ">
+        <label for="project-name" class="form-label">Project Name</label>
       </div>
+
       <div class="form-group">
-        <label class="form-label" for="project-description">Description</label>
-        <textarea name="project_description" id="project-description" class="form-input" required></textarea>
+        <textarea name="project_description" id="project-description" class="form-input" required placeholder=" "></textarea>
+        <label for="project-description" class="form-label">Description</label>
       </div>
+
       <div class="form-group">
-        <label class="form-label" for="project-status">Status</label>
         <select name="project_status" id="project-status" class="form-input" required>
+          <option value="" disabled selected hidden></option>
           <option value="Active">Active</option>
           <option value="Completed">Completed</option>
           <option value="Pending">Pending</option>
         </select>
+        <label for="project-status" class="form-label">Status</label>
       </div>
+
       <div class="form-group">
-        <label class="form-label" for="project-link">Project Link</label>
-        <input type="url" name="project_link" id="project-link" class="form-input">
+        <input type="url" name="project_link" id="project-link" class="form-input" placeholder=" ">
+        <label for="project-link" class="form-label">Project Link</label>
       </div>
+
       <button type="submit" class="form-button">Update</button>
     </form>
+
   </div>
 </div>
 
-<!-- Delete Project Modal -->
+
+
+
+<!-- ===============================
+     DELETE PROJECT MODAL
+================================= -->
 <div id="delete-project-modal" class="modal">
   <div class="modal-content">
     <span class="close-btn">&times;</span>
     <h2 class="form-title">Confirm Delete</h2>
     <p>Are you sure you want to delete this project?</p>
+
     <form action="{{ url_for('admin.delete_project') }}" method="POST" class="form">
       <input type="hidden" name="project_id" id="delete-project-id">
       <button type="submit" class="form-button danger">Delete</button>
       <button type="button" class="form-button" onclick="closeDeleteModal()">Cancel</button>
     </form>
+
   </div>
 </div>
+
 {% endblock %}
 
 {% block scripts %}
 <script>
-/* ================================
-   🎯 Modal + Form Interactions
-   ================================ */
+/* ============================
+   Load Edit Modal
+============================ */
 document.querySelectorAll('.edit-btn').forEach(button => {
   button.addEventListener('click', function() {
     const modal = document.getElementById('update-project-modal');
     modal.classList.add('show');
+
     document.getElementById('project-id').value = this.dataset.id;
     document.getElementById('project-name').value = this.dataset.name;
     document.getElementById('project-description').value = this.dataset.description;
@@ -179,6 +219,7 @@ document.querySelectorAll('.edit-btn').forEach(button => {
     document.getElementById('project-link').value = this.dataset.link;
   });
 });
+
 
 function openDeleteModal(id) {
   document.getElementById('delete-project-id').value = id;
@@ -199,28 +240,34 @@ window.addEventListener('click', e => {
   });
 });
 
+/* ============================
+   Open Add Modal
+============================ */
 document.getElementById('add-project-btn').addEventListener('click', () => {
   document.getElementById('add-project-modal').classList.add('show');
 });
 
-/* ================================
-   🔍 Live Search (Instant Filter)
-   ================================ */
+/* ============================
+   Instant Search
+============================ */
 const searchInput = document.getElementById('search-bar');
 const tableBody = document.querySelector('.user-table tbody');
 
 searchInput.addEventListener('input', function() {
   const filter = this.value.trim().toLowerCase();
   const rows = tableBody.querySelectorAll('tr');
+
   rows.forEach(row => {
     const cells = row.querySelectorAll('td');
-    let matchFound = false;
+    let match = false;
+
     cells.forEach(cell => {
       if (cell.textContent.trim().toLowerCase().includes(filter)) {
-        matchFound = true;
+        match = true;
       }
     });
-    row.style.display = matchFound ? '' : 'none';
+
+    row.style.display = match ? '' : 'none';
   });
 });
 </script>

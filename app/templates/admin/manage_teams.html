@@ -15,10 +15,12 @@
   <section class="user-management">
     <h2>Team Management</h2>
 
+    <!-- Add Team Button -->
     <div class="add-btn-container">
-        <button id="add-team-btn" class="add-btn"><i class="fas fa-plus"></i> Add Team Member</button>
-      </div>
+      <button id="add-team-btn" class="add-btn"><i class="fas fa-plus"></i> Add Team Member</button>
+    </div>
 
+    <!-- Search Bar -->
     <div class="wrap-items">
       <div class="user-search-bar">
         <form method="GET">
@@ -26,8 +28,6 @@
           <button type="submit" class="search-btn">Search</button>
         </form>
       </div>
-
-      
     </div>
 
     <!-- Flash Messages -->
@@ -41,47 +41,50 @@
     {% endif %}
     {% endwith %}
 
-    <!-- Teams Table (uses same user-table class as Projects) -->
-    <table class="user-table">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>Team Member</th>
-          <th>Professionalism</th>
-          <th>Role Played</th>
-          <th>Image</th>
-          <th>Date Added</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for team in teams %}
-        <tr>
-          <td>{{ loop.index }}</td>
-          <td>{{ team[1] }}</td>
-          <td>{{ team[2] }}</td>
-          <td>{{ team[3] }}</td>
-          <td><img src="{{ url_for('static', filename=team[5]) }}" alt="Team Image" style="width:50px;height:50px;border-radius:6px;"></td>
-          <td>{{ team[4] }}</td>
-          <td class="action">
-            <button class="edit-btn"
-                    data-id="{{ team[0] }}"
-                    data-name="{{ team[1] }}"
-                    data-professionalism="{{ team[2] }}"
-                    data-role="{{ team[3] }}"
-                    data-image="{{ url_for('static', filename=team[5]) }}">
-              <i class="fas fa-edit"></i> Edit
-            </button>
-            <button class="delete-btn"
-                    data-id="{{ team[0] }}"
-                    onclick="openDeleteModal('{{ team[0] }}')">
-              <i class="fas fa-trash"></i> Delete
-            </button>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <!-- Table Wrapper -->
+    <div class="user-table-wrapper">
+      <table class="user-table">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Team Member</th>
+            <th>Professionalism</th>
+            <th>Role Played</th>
+            <th>Image</th>
+            <th>Date Added</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for team in teams %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ team[1] }}</td>
+            <td>{{ team[2] }}</td>
+            <td>{{ team[3] }}</td>
+            <td><img src="{{ url_for('static', filename=team[5]) }}" alt="Team Image" style="width:50px;height:50px;border-radius:6px;"></td>
+            <td>{{ team[4] }}</td>
+            <td class="action">
+              <button class="edit-btn"
+                      data-id="{{ team[0] }}"
+                      data-name="{{ team[1] }}"
+                      data-professionalism="{{ team[2] }}"
+                      data-role="{{ team[3] }}"
+                      data-image="{{ url_for('static', filename=team[5]) }}">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="delete-btn"
+                      data-id="{{ team[0] }}"
+                      onclick="openDeleteModal('{{ team[0] }}')">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
   </section>
 </div>
 
@@ -90,23 +93,29 @@
   <div class="modal-content">
     <span class="close-btn">&times;</span>
     <h2 class="form-title">Add Team Member</h2>
+
     <form action="{{ url_for('admin.add_team') }}" method="POST" enctype="multipart/form-data" class="form">
-      <div class="form-group">
+
+      <div class="form-group floating">
+        <input type="text" name="team_member_name" id="add-team-name" class="form-input" required placeholder=" ">
         <label class="form-label" for="add-team-name">Team Member Name</label>
-        <input type="text" name="team_member_name" id="add-team-name" class="form-input" required>
       </div>
-      <div class="form-group">
+
+      <div class="form-group floating">
+        <input type="text" name="professionalism" id="add-team-professionalism" class="form-input" required placeholder=" ">
         <label class="form-label" for="add-team-professionalism">Professionalism</label>
-        <input type="text" name="professionalism" id="add-team-professionalism" class="form-input" required>
       </div>
-      <div class="form-group">
+
+      <div class="form-group floating">
+        <input type="text" name="role_played" id="add-team-role" class="form-input" required placeholder=" ">
         <label class="form-label" for="add-team-role">Role Played</label>
-        <input type="text" name="role_played" id="add-team-role" class="form-input" required>
       </div>
-      <div class="form-group">
-        <label class="form-label" for="add-team-image">Upload Image</label>
+
+      <div class="form-group floating file-input">
         <input type="file" name="image_url" id="add-team-image" class="form-input" required>
+        <label class="form-label" for="add-team-image">Upload Image</label>
       </div>
+
       <button type="submit" class="form-button">Add Team Member</button>
     </form>
   </div>
@@ -117,27 +126,35 @@
   <div class="modal-content">
     <span class="close-btn">&times;</span>
     <h2 class="form-title">Edit Team Member</h2>
+
     <form action="{{ url_for('admin.update_team') }}" method="POST" enctype="multipart/form-data" class="form">
+
       <input type="hidden" name="team_id" id="team-id">
-      <div class="form-group">
+
+      <div class="form-group floating">
+        <input type="text" name="team_member_name" id="team-name" class="form-input" required placeholder=" ">
         <label class="form-label" for="team-name">Team Member Name</label>
-        <input type="text" name="team_member_name" id="team-name" class="form-input" required>
       </div>
-      <div class="form-group">
+
+      <div class="form-group floating">
+        <input type="text" name="professionalism" id="team-professionalism" class="form-input" required placeholder=" ">
         <label class="form-label" for="team-professionalism">Professionalism</label>
-        <input type="text" name="professionalism" id="team-professionalism" class="form-input" required>
       </div>
-      <div class="form-group">
+
+      <div class="form-group floating">
+        <input type="text" name="role_played" id="team-role" class="form-input" required placeholder=" ">
         <label class="form-label" for="team-role">Role Played</label>
-        <input type="text" name="role_played" id="team-role" class="form-input" required>
       </div>
-      <div class="form-group">
-        <label class="form-label" for="team-image">Image</label>
+
+      <div class="form-group floating file-input">
         <input type="file" name="image_url" id="team-image" class="form-input">
+        <label class="form-label" for="team-image">Image</label>
+
         <div>
-          <img id="image-preview" src="" alt="Current_img" style="max-width: 100px; display: none;">
+          <img id="image-preview" src="" alt="Current Image" style="max-width:100px; display:none; margin-top:10px;">
         </div>
       </div>
+
       <button type="submit" class="form-button">Update</button>
     </form>
   </div>
@@ -149,6 +166,7 @@
     <span class="close-btn">&times;</span>
     <h2 class="form-title">Confirm Delete</h2>
     <p>Are you sure you want to delete this team member?</p>
+
     <form action="{{ url_for('admin.delete_team') }}" method="POST" class="form">
       <input type="hidden" name="team_id" id="delete-team-id">
       <button type="submit" class="form-button danger">Delete</button>
@@ -160,9 +178,6 @@
 
 {% block scripts %}
 <script>
-/* ================================
-   🎯 Modal + Form Interactions
-   ================================ */
 document.querySelectorAll('.edit-btn').forEach(button => {
   button.addEventListener('click', function() {
     const modal = document.getElementById('update-team-modal');
@@ -173,9 +188,9 @@ document.querySelectorAll('.edit-btn').forEach(button => {
     document.getElementById('team-professionalism').value = this.dataset.professionalism;
     document.getElementById('team-role').value = this.dataset.role;
 
-    // image dataset contains full url already
     const imageUrl = this.dataset.image || '';
     const preview = document.getElementById('image-preview');
+
     if (imageUrl) {
       preview.src = imageUrl;
       preview.style.display = 'block';
@@ -208,23 +223,24 @@ document.getElementById('add-team-btn').addEventListener('click', () => {
   document.getElementById('add-team-modal').classList.add('show');
 });
 
-/* ================================
-   🔍 Live Search (Instant Filter)
-   ================================ */
+// Live Search
 const searchInput = document.getElementById('search-bar');
 const tableBody = document.querySelector('.user-table tbody');
 
 searchInput.addEventListener('input', function() {
   const filter = this.value.trim().toLowerCase();
   const rows = tableBody.querySelectorAll('tr');
+
   rows.forEach(row => {
     const cells = row.querySelectorAll('td');
     let matchFound = false;
+
     cells.forEach(cell => {
       if (cell.textContent.trim().toLowerCase().includes(filter)) {
         matchFound = true;
       }
     });
+
     row.style.display = matchFound ? '' : 'none';
   });
 });

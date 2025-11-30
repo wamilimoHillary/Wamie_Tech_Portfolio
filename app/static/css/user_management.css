@@ -27,7 +27,7 @@
 }
 
 .add-btn {
-  background-color: #157903; /* modern green tone */
+  background-color: #157903;
   color: #fff;
   border: none;
   padding: 8px 16px;
@@ -52,7 +52,6 @@
 .add-btn:active {
   transform: translateY(0);
 }
-
 
 .user-search-bar {
   width: 100%;
@@ -103,10 +102,20 @@
 }
 
 /* ======================================================
-   TABLE STYLES
+   TABLE STYLES — SCROLL FIX
 ====================================================== */
+
+/* Wrapper prevents entire page from scrolling */
+.user-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-radius: 8px;
+  -webkit-overflow-scrolling: touch;
+}
+
 .user-management {
-  overflow-x: auto; /* ✅ Enables scroll on small screens */
+  width: 100%;
 }
 
 .user-management table {
@@ -116,7 +125,7 @@
   background: var(--bg2-color);
   box-shadow: 0 2px 8px var(--box-shadow-color);
   border: 1px solid var(--border-color);
-  min-width: 700px; /* keeps proper layout on mobile scroll */
+  min-width: 700px; /* Keeps layout structured on mobile */
 }
 
 .user-management th,
@@ -130,7 +139,7 @@
   background: var(--accent-color);
   color: var(--text-color);
   font-weight: 600;
-  border:1px solid white;
+  border: 1px solid white;
 }
 
 .user-management td {
@@ -150,8 +159,9 @@
 /* ======================================================
    ACTION BUTTONS
 ====================================================== */
-.edit-btn, .delete-btn {
-  background:var(--flash-success-bg);
+.edit-btn,
+.delete-btn {
+  background: var(--flash-success-bg);
   color: #fff;
   border: none;
   padding: 6px 10px;
@@ -159,13 +169,15 @@
   cursor: pointer;
   font-size: 0.9rem;
   transition: 0.2s ease;
+  margin-top:3px ;
 }
 
 .delete-btn {
-  background:var(--flash-error-bg)
+  background: var(--flash-error-bg);
 }
 
-.edit-btn:hover, .delete-btn:hover {
+.edit-btn:hover,
+.delete-btn:hover {
   opacity: 0.85;
   transform: scale(1.03);
 }
@@ -183,7 +195,11 @@
   z-index: 2000;
   transition: opacity 0.3s ease;
 }
-.modal.show { display: flex; animation: fadeIn 0.25s ease; }
+
+.modal.show {
+  display: flex;
+  animation: fadeIn 0.25s ease;
+}
 
 .modal-content {
   background: var(--bg2-color);
@@ -199,16 +215,21 @@
 
 .close-btn {
   position: absolute;
-  top: 8px; right: 12px;
+  top: 8px;
+  right: 12px;
   background: none;
   border: none;
   font-size: 1.4rem;
   color: var(--text-color3);
   cursor: pointer;
 }
-.close-btn:hover { color: var(--accent-color); }
 
-.form-input, .form-button {
+.close-btn:hover {
+  color: var(--accent-color);
+}
+
+.form-input,
+.form-button {
   width: 100%;
   padding: 10px;
   border-radius: 6px;
@@ -216,51 +237,116 @@
   background: var(--bg-color);
   color: var(--text-color);
 }
+
 .form-button {
   background: var(--accent-color);
   border: none;
   cursor: pointer;
   transition: 0.25s;
 }
-.form-button:hover { opacity: 0.9; transform: scale(1.03); }
-.form-button.danger { background: red; }
+
+.form-button:hover {
+  opacity: 0.9;
+  transform: scale(1.03);
+}
+
+.form-button.danger {
+  background: red;
+}
 
 /* ======================================================
    ANIMATIONS
 ====================================================== */
-@keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
-@keyframes slideUp { from {transform: translateY(20px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
 
 /* ======================================================
-   RESPONSIVE
+   RESPONSIVE — TABLE SCROLL ONLY
 ====================================================== */
 @media screen and (max-width: 768px) {
-  .main-content { margin-left: 0;
-     padding: 15px; 
+  .main-content {
+    margin-left: 0;
+    padding: 15px;
     margin: auto;
-    }
+  }
 
-  .wrap-items { margin: 15px 0 25px; }
+  .action{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 3px;
+    flex-wrap: nowrap;
+  }
+  .wrap-items {
+    margin: 15px 0 25px;
+  }
 
-  .user-search-bar { max-width: 95%; }
-  .user-search-bar form { padding: 4px 6px; }
-  .user-search-bar input[type="text"] { font-size: 14px; padding: 10px 12px; }
-  .user-search-bar .search-btn { padding: 8px 14px; font-size: 13px; }
+  .user-search-bar {
+    max-width: 95%;
+  }
+
+  .user-search-bar form {
+    padding: 4px 6px;
+  }
+
+  .user-search-bar input[type="text"] {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+
+  .user-search-bar .search-btn {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
 
   .user-management table {
     font-size: 0.9rem;
     min-width: 650px;
   }
 
-  .modal-content { width: 95%; padding: 18px; }
+  body, html {
+    overflow-x: hidden !important; /* Prevent page scroll */
+  }
+
+  .modal-content {
+    width: 95%;
+    padding: 18px;
+  }
 }
 
+/* ======================================================
+   EXTRA SMALL SCREENS — WATCH SIZE (<200px)
+====================================================== */
+@media screen and (max-width: 200px) {
+  html {
+    font-size: 8px;
+  }
 
+  .user-management table {
+    min-width: 550px;
+    font-size: 8px;
+  }
 
+  .user-table-wrapper {
+    overflow-x: auto !important;
+  }
 
-/* =============================
-   FLASH MESSAGES (Compact & Reusable)
-   ============================= */
+  * {
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+}
+
+/* ======================================================
+   FLASH MESSAGES
+====================================================== */
 .flash-messages {
   margin: 10px auto;
   max-width: 600px;
@@ -279,14 +365,7 @@
   animation: fadeIn 0.3s ease;
 }
 
-/* Success, Error, Info, Warning states */
-.flash.success { background: #28a745; }   /* green */
-.flash.error   { background: #dc3545; }   /* red */
-.flash.info    { background: #007bff; }   /* blue */
-.flash.warning { background: #ffc107; color: #222; } /* yellow */
-
-/* Optional subtle fade-in */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+.flash.success { background: #28a745; }
+.flash.error   { background: #dc3545; }
+.flash.info    { background: #007bff; }
+.flash.warning { background: #ffc107; color: #222; }

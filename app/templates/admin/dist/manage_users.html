@@ -24,52 +24,55 @@
       </div>
     </div>
 
-   
-    <!-- Users Table -->
-    <table class="user-table">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>Username</th>
-          <th>Email</th>
-          <th>Phone</th>
-          <th>Status</th>
-          <th>Created At</th>
-          <th>Actions</th>
-        </tr>
-      </thead> 
-      <tbody>
-        {% for user in users %}
-        <tr>
-          <td>{{ loop.index }}</td><!--Jinja’s built-in loop.index to generate row numbers starting from 1-->
-          <td>{{ user[1] }}</td>
-          <td>{{ user[2] }}</td>
-          <td>{{ user[3] }}</td>
-          <td>{{ user[5] }}</td>
-          <td>{{ user[7] }}</td>
-          <td class="action">
-            <button class="edit-btn" 
-                    data-id="{{ user[0] }}" 
-                    data-username="{{ user[1] }}" 
-                    data-email="{{ user[2] }}" 
-                    data-phone="{{ user[3] }}" 
-                    data-status="{{ user[5] }}">
-              <i class="fas fa-edit"></i> Edit
-            </button>
-            <button class="delete-btn" 
-                    data-id="{{ user[0] }}" 
-                    onclick="openDeleteModal('{{ user[0] }}')">
-              <i class="fas fa-trash"></i> Delete
-            </button>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <!-- ⭐ Table wrapper for scrolling -->
+    <div class="user-table-wrapper">
+      <table class="user-table">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ user[1] }}</td>
+            <td>{{ user[2] }}</td>
+            <td>{{ user[3] }}</td>
+            <td>{{ user[5] }}</td>
+            <td>{{ user[7] }}</td>
+            <td class="action">
+              <button class="edit-btn" 
+                      data-id="{{ user[0] }}" 
+                      data-username="{{ user[1] }}" 
+                      data-email="{{ user[2] }}" 
+                      data-phone="{{ user[3] }}" 
+                      data-status="{{ user[5] }}">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="delete-btn" 
+                      data-id="{{ user[0] }}" 
+                      onclick="openDeleteModal('{{ user[0] }}')">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <!-- END WRAPPER -->
+
   </section>
 </div>
 
-<!-- Edit Modal -->
+<!-- Edit User Modal -->
 <div id="update-user-modal" class="modal"> 
   <div class="modal-content">
     <span class="close-btn">&times;</span>
@@ -78,15 +81,15 @@
     <form action="{{ url_for('admin.update_user') }}" method="POST" class="form">
       <input type="hidden" name="user_id" id="user-id">
       <div class="form-group">
-        <label class="form-label" for="username">jkjlk;lkj</label>
+        <label class="form-label" for="username">Username</label>
         <input type="text" name="username" id="username" class="form-input" required>
       </div>
       <div class="form-group">
-        <label class="form-label" for="email"></label>
+        <label class="form-label" for="email">Email</label>
         <input type="email" name="email" id="email" class="form-input" required>
       </div>
       <div class="form-group">
-        <label class="form-label" for="phone"></label>
+        <label class="form-label" for="phone">Phone</label>
         <input type="text" name="phone" id="phone" class="form-input" required>
       </div>
       <div class="form-group">
@@ -101,7 +104,7 @@
   </div>
 </div>
 
-<!-- Delete Modal -->
+<!-- Delete User Modal -->
 <div id="delete-user-modal" class="modal">
   <div class="modal-content">
     <span class="close-btn">&times;</span>
@@ -118,6 +121,9 @@
 
 {% block scripts %}
 <script>
+/* ================================
+   🎯 Modal + Form Interactions
+   ================================ */
 document.querySelectorAll('.edit-btn').forEach(button => {
   button.addEventListener('click', function() {
     const modal = document.getElementById('update-user-modal');
@@ -149,9 +155,9 @@ window.addEventListener('click', e => {
   });
 });
 
-/* ==========================================================
-   🔍 Enhanced Instant JS Table Filter (Live Matching)
-   ========================================================== */
+/* ================================
+   🔍 Live Search (Instant Filter)
+   ================================ */
 const searchInput = document.getElementById('search-bar');
 const tableBody = document.querySelector('.user-table tbody');
 
@@ -164,8 +170,7 @@ searchInput.addEventListener('input', function () {
     let matchFound = false;
 
     cells.forEach(cell => {
-      const cellText = cell.textContent.trim().toLowerCase();
-      if (cellText.includes(filter)) {
+      if (cell.textContent.trim().toLowerCase().includes(filter)) {
         matchFound = true;
       }
     });
@@ -175,4 +180,3 @@ searchInput.addEventListener('input', function () {
 });
 </script>
 {% endblock %}
-

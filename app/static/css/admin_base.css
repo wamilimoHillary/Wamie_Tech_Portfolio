@@ -22,7 +22,7 @@ body {
     position: fixed;
     flex-direction: column;
     padding: 20px;
-    z-index: 1;
+    z-index: 99;
 }
 
 .sidebar-header h2 {
@@ -64,7 +64,7 @@ body {
     height: 8vh;
     width: 100%;
     background:var(--text-color);
-    padding: 5px;
+    padding: 5px 12px;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -72,6 +72,7 @@ body {
     position: fixed;
     top: 0;
     color: var(--text-color);
+    z-index: 1;
 }
 
 .dashboard-header h1 {
@@ -123,8 +124,11 @@ body {
     /* Sidebar */
     .dashboard-sidebar {
         display: none;
+        width: 90%;
+        padding: 10px;
+        font-size: 1rem;
     }
-
+    
     .dashboard-sidebar.active {
         display: block !important;
     }
@@ -182,5 +186,96 @@ body {
         right: 10px;
         color: var(--text-color);
         display: block;
+    }
+}
+
+/* ==========================
+   Ultra-Small Screens (Smartwatch < 200px)
+   ========================== */
+@media screen and (max-width: 200px) {
+
+    /* Reduce base font size */
+    html {
+        font-size: 7px !important;
+    }
+
+    body {
+        flex-direction: column;
+        overflow-x: hidden;
+    }
+
+    /* Sidebar becomes full screen */
+    .dashboard-sidebar {
+        width: 100%;
+        padding: 10px;
+        font-size: 1rem;
+    }
+
+    .sidebar-header h2 {
+        font-size: 1.2rem;
+    }
+
+    .sidebar-link {
+        padding: 6px;
+        margin: 3px 0;
+        font-size: 0.9rem;
+    }
+
+    .sidebar-link i {
+        margin-right: 5px;
+        font-size: 1rem;
+    }
+
+    /* Close button bigger for finger tap */
+    #close-btn {
+        font-size: 1.8rem !important;
+        top: 5px;
+        right: 5px;
+    }
+
+    /* Header compress */
+    .dashboard-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between; /* spread items nicely */
+    align-items: center;
+    width: 100%;
+}
+
+
+    .dashboard-header h1 {
+        font-size: 0.9rem;
+        text-align: center;
+    }
+
+    .Hamburger-menu-btn {
+        font-size: 1.6rem;
+        padding: 2px 8px;
+    }
+
+    .btn-logout {
+        font-size: 0.7rem;
+        padding: 4px 6px;
+    }
+
+    /* Main content becomes simple and scrollable */
+    .dashboard-content {
+        margin: 50px 0 0 0 !important;
+        padding: 10px;
+        width: 100%;
+        font-size: 1rem;
+    }
+
+    /* Dropdown select shrink */
+    .child-selector select {
+        padding: 4px;
+        width: 100%;
+        font-size: 0.9rem;
+    }
+
+    /* Prevent overflow for all elements */
+    * {
+        max-width: 100% !important;
+        box-sizing: border-box;
     }
 }

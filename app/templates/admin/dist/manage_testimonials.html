@@ -1,28 +1,37 @@
 {% extends "admin/admin_base.html" %}
 
-{% block title %}Manage Testimonials{% endblock %}
+{% block title %}Testimonial Management{% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/user_management.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_forms.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/search_bar.css') }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
 {% endblock %}
 
 {% block admin_content %}
 <div class="admin-container" style="margin:5px;">
-  <section class="testimonial-management">
-    <h2>Manage Testimonials</h2>
+  <section class="user-management">
+    <h2>Testimonial Management</h2>
 
-    <div class="wrap-items">
-      <div class="back-to-dashboard">
-        <a href="{{ url_for('admin.admin_dashboard') }}" class="back-link">
-          <i class="fas fa-arrow-left"></i> Back to Dashboard
-        </a>
-      </div>
-      <div class="add-btn-container">
-        <button id="add-testimonial-btn" class="add-btn"><i class="fas fa-plus"></i> Add Testimonial</button>
+    <!-- Add Testimonial Button -->
+    <div class="add-btn-container">
+      <button id="add-testimonial-btn" class="add-btn"><i class="fas fa-plus"></i> Add Testimonial</button>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search_container">
+      <div class="search_bar">
+        <button type="button" class="search_btn" id="search-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 
+            3.85a1 1 0 0 0 1.415-1.415l-3.85-3.85zm-5.242.656a5 
+            5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+          </svg>
+        </button>
+
+        <input type="text" class="search_input" placeholder="Search by client, workplace, position, project, testimonial or date..." id="search-input">
       </div>
     </div>
 
@@ -37,136 +46,158 @@
       {% endif %}
     {% endwith %}
 
-    <!-- Testimonials Table -->
+    <!-- Table Wrapper -->
     <div class="user-table-wrapper">
-      <table class="user-table testimonial-table">
+      <table class="user-table" id="testimonial-table">
         <thead>
           <tr>
-            <th>ID</th>
+            <th>No</th>
             <th>Client Name</th>
-            <th>Client Picture</th>
             <th>Workplace</th>
             <th>Position</th>
-            <th>Project Worked On</th>
+            <th>Project</th>
+            <th>Picture</th>
             <th>Testimonial</th>
             <th>Date Added</th>
             <th>Actions</th>
           </tr>
         </thead>
+
         <tbody>
-          {% for t in testimonial %}
-          <tr>
-            <td>{{ t[0] }}</td>
-            <td>{{ t[1] }}</td>
-            <td><img src="{{ url_for('static', filename=t[2]) }}" alt="Client-img" style="width:50px;height:50px;border-radius:6px;"></td>
-            <td>{{ t[3] }}</td>
-            <td>{{ t[4] }}</td>
-            <td>{{ t[5] }}</td>
-            <td>{{ t[6] }}</td>
-            <td>{{ t[7] }}</td>
-            <td class="action">
-              <button class="edit-btn"
-                      data-id="{{ t[0] }}"
-                      data-name="{{ t[1] }}"
-                      data-picture="{{ t[2] }}"
-                      data-workplace="{{ t[3] }}"
-                      data-position="{{ t[4] }}"
-                      data-project="{{ t[5] }}"
-                      data-testimonial="{{ t[6] }}">
-                <i class="fas fa-edit"></i> Edit
-              </button>
-              <button class="delete-btn"
-                      data-id="{{ t[0] }}">
-                <i class="fas fa-trash"></i> Delete
-              </button>
-            </td>
-          </tr>
+          {% for client in testimonials %}
+            {# schema order: testimonial_id(0), client_name(1), client_picture(2),
+               workplace(3), position(4), project_worked_on(5), testimonial_text(6), date_added(7) #}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ client[1] }}</td>
+              <td>{{ client[3] }}</td>
+              <td>{{ client[4] }}</td>
+              <td>{{ client[5] }}</td>
+              <td>
+                {% if client[2] %}
+                 <img src="{{ url_for('static', filename=client[2]) }}"  
+     alt="Client Picture" 
+     class="table-thumb"
+     style="width:50px; height:50px; border-radius:6px; object-fit:cover;">
+
+                {% else %}
+                  <div class="no-image">—</div>
+                {% endif %}
+              </td>
+              <td class="testimonial-cell">{{ client[6] | truncate(80) }}</td>
+              <td>{{ client[7] }}</td>
+              <td class="action" style="display:flex; gap: 5px; justify-content: space-between; ">
+                <button class="edit-btn"
+                        data-id="{{ client[0] }}"
+                        data-client="{{ client[1]|e }}"
+                        data-picture="{{ url_for('static', filename=client[2]) if client[2] else '' }}"
+                        data-workplace="{{ client[3]|e }}"
+                        data-position="{{ client[4]|e }}"
+                        data-project="{{ client[5]|e }}"
+                        data-testimonial="{{ client[6]|e }}">
+                  <i class="fas fa-edit"></i> Edit
+                </button>
+
+                <button class="delete-btn"
+                        data-id="{{ client[0] }}"
+                        onclick="openDeleteModal('{{ client[0] }}')">
+                  <i class="fas fa-trash"></i> Delete
+                </button>
+              </td>
+            </tr>
           {% endfor %}
         </tbody>
+
       </table>
     </div>
+
   </section>
 </div>
 
-<!-- Add Testimonial Modal -->
-<div id="addModal" class="modal">
+<!-- ADD TESTIMONIAL MODAL -->
+<div id="add-testimonial-modal" class="modal">
   <div class="modal-content">
-    <span id="closeAddModal" class="close-btn">&times;</span>
+    <span class="close-btn">&times;</span>
     <h2 class="form-title">Add Testimonial</h2>
-    <form action="{{ url_for('admin.add_testimonial') }}" method="POST" class="form" enctype="multipart/form-data">
 
-      <div class="form-floating">
-        <input type="text" name="client_name" id="add-name" class="form-input" required>
-        <label for="add-name" class="form-label">Client Name</label>
+    <form action="{{ url_for('admin.add_testimonial') }}" method="POST" enctype="multipart/form-data" class="form">
+
+      <div class="form-group floating">
+        <input type="text" name="client_name" id="add-client-name" class="form-input" required placeholder=" ">
+        <label class="form-label" for="add-client-name">Client Name</label>
       </div>
 
-      <div class="form-floating">
-        <input type="file" name="client_picture" id="add-picture" class="form-input">
-        <label for="add-picture" class="form-label">Client Picture</label>
+      <div class="form-group floating">
+        <input type="text" name="workplace" id="add-workplace" class="form-input" required placeholder=" ">
+        <label class="form-label" for="add-workplace">Workplace</label>
       </div>
 
-      <div class="form-floating">
-        <input type="text" name="workplace" id="add-workplace" class="form-input" required>
-        <label for="add-workplace" class="form-label">Workplace</label>
+      <div class="form-group floating">
+        <input type="text" name="position" id="add-position" class="form-input" required placeholder=" ">
+        <label class="form-label" for="add-position">Position</label>
       </div>
 
-      <div class="form-floating">
-        <input type="text" name="position" id="add-position" class="form-input" required>
-        <label for="add-position" class="form-label">Position</label>
+      <div class="form-group floating">
+        <input type="text" name="project_worked_on" id="add-project" class="form-input" required placeholder=" ">
+        <label class="form-label" for="add-project">Project Worked On</label>
       </div>
 
-      <div class="form-floating">
-        <input type="text" name="project_name" id="add-project" class="form-input" required>
-        <label for="add-project" class="form-label">Project</label>
+      <div class="form-group floating file-input">
+        <input type="file" name="client_picture" id="add-client-picture" class="form-input">
+        <label class="form-label" for="add-client-picture">Client Picture (optional)</label>
       </div>
 
-      <div class="form-floating">
-        <textarea name="testimonial_text" id="add-testimonial" class="form-input" rows="4" required></textarea>
-        <label for="add-testimonial" class="form-label">Testimonial</label>
+      <div class="form-group floating">
+        <textarea name="testimonial_text" id="add-testimonial-text" class="form-input" required placeholder=" "></textarea>
+        <label class="form-label" for="add-testimonial-text">Testimonial</label>
       </div>
 
-      <button type="submit" class="form-button">Add</button>
+      <button type="submit" class="form-button">Add Testimonial</button>
     </form>
   </div>
 </div>
 
-<!-- Edit Testimonial Modal -->
-<div id="editModal" class="modal">
+<!-- UPDATE TESTIMONIAL MODAL -->
+<div id="update-testimonial-modal" class="modal">
   <div class="modal-content">
-    <span id="closeEditModal" class="close-btn">&times;</span>
+    <span class="close-btn">&times;</span>
     <h2 class="form-title">Edit Testimonial</h2>
-    <form action="{{ url_for('admin.update_testimonial') }}" method="POST" class="form" enctype="multipart/form-data">
-      <input type="hidden" name="testimonial_id" id="edit-id">
 
-      <div class="form-floating">
-        <input type="text" name="client_name" id="edit-name" class="form-input" required>
-        <label for="edit-name" class="form-label">Client Name</label>
+    <form action="{{ url_for('admin.update_testimonial') }}" method="POST" enctype="multipart/form-data" class="form">
+      <input type="hidden" name="testimonial_id" id="testimonial-id">
+
+      <div class="form-group floating">
+        <input type="text" name="client_name" id="testimonial-client" class="form-input" required placeholder=" ">
+        <label class="form-label" for="testimonial-client">Client Name</label>
       </div>
 
-      <div class="form-floating">
-        <input type="file" name="client_picture" id="edit-picture" class="form-input">
-        <label for="edit-picture" class="form-label">Client Picture</label>
-        <img id="current-picture" src="" alt="Current_img" style="max-width:100px; display:block; margin-top:5px;">
+      <div class="form-group floating">
+        <input type="text" name="workplace" id="testimonial-workplace" class="form-input" required placeholder=" ">
+        <label class="form-label" for="testimonial-workplace">Workplace</label>
       </div>
 
-      <div class="form-floating">
-        <input type="text" name="workplace" id="edit-workplace" class="form-input" required>
-        <label for="edit-workplace" class="form-label">Workplace</label>
+      <div class="form-group floating">
+        <input type="text" name="position" id="testimonial-position" class="form-input" required placeholder=" ">
+        <label class="form-label" for="testimonial-position">Position</label>
       </div>
 
-      <div class="form-floating">
-        <input type="text" name="position" id="edit-position" class="form-input" required>
-        <label for="edit-position" class="form-label">Position</label>
+      <div class="form-group floating">
+        <input type="text" name="project_worked_on" id="testimonial-project" class="form-input" required placeholder=" ">
+        <label class="form-label" for="testimonial-project">Project Worked On</label>
       </div>
 
-      <div class="form-floating">
-        <input type="text" name="project_name" id="edit-project" class="form-input" required>
-        <label for="edit-project" class="form-label">Project</label>
+      <div class="form-group floating file-input">
+        <input type="file" name="client_picture" id="testimonial-picture" class="form-input">
+        <label class="form-label" for="testimonial-picture">Change Picture</label>
+
+        <div>
+          <img id="testimonial-image-preview" src="" alt="Current Picture" style="max-width:120px; display:none; margin-top:10px; border-radius:6px;">
+        </div>
       </div>
 
-      <div class="form-floating">
-        <textarea name="testimonial_text" id="edit-testimonial" class="form-input" rows="4" required></textarea>
-        <label for="edit-testimonial" class="form-label">Testimonial</label>
+      <div class="form-group floating">
+        <textarea name="testimonial_text" id="testimonial-text" class="form-input" required placeholder=" "></textarea>
+        <label class="form-label" for="testimonial-text">Testimonial</label>
       </div>
 
       <button type="submit" class="form-button">Update</button>
@@ -174,16 +205,17 @@
   </div>
 </div>
 
-<!-- Delete Testimonial Modal -->
-<div id="deleteModal" class="modal">
+<!-- DELETE MODAL -->
+<div id="delete-testimonial-modal" class="modal">
   <div class="modal-content">
-    <span id="closeDeleteModal" class="close-btn">&times;</span>
+    <span class="close-btn">&times;</span>
     <h2 class="form-title">Confirm Delete</h2>
     <p>Are you sure you want to delete this testimonial?</p>
+
     <form action="{{ url_for('admin.delete_testimonial') }}" method="POST" class="form">
-      <input type="hidden" name="testimonial_id" id="delete-id">
+      <input type="hidden" name="testimonial_id" id="delete-testimonial-id">
       <button type="submit" class="form-button danger">Delete</button>
-      <button type="button" class="form-button" onclick="document.getElementById('deleteModal').style.display='none'">Cancel</button>
+      <button type="button" class="form-button" onclick="closeDeleteModal()">Cancel</button>
     </form>
   </div>
 </div>
@@ -191,51 +223,89 @@
 
 {% block scripts %}
 <script>
-/* ================================
-   🎯 Modal + Form Interactions
-   ================================ */
+/* ==========================
+   Edit Modal Logic
+========================== */
+document.querySelectorAll('.edit-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const modal = document.getElementById('update-testimonial-modal');
+    modal.classList.add('show');
 
-// Open Add Modal
-document.getElementById("add-testimonial-btn").onclick = () => {
-  document.getElementById("addModal").style.display = "block";
-};
+    document.getElementById('testimonial-id').value = this.dataset.id;
+    document.getElementById('testimonial-client').value = this.dataset.client;
+    document.getElementById('testimonial-workplace').value = this.dataset.workplace;
+    document.getElementById('testimonial-position').value = this.dataset.position;
+    document.getElementById('testimonial-project').value = this.dataset.project;
+    document.getElementById('testimonial-text').value = this.dataset.testimonial;
 
-// Open Edit Modal
-document.querySelectorAll(".edit-btn").forEach(btn => {
-  btn.onclick = () => {
-    document.getElementById("edit-id").value = btn.dataset.id;
-    document.getElementById("edit-name").value = btn.dataset.name;
-    document.getElementById("edit-workplace").value = btn.dataset.workplace;
-    document.getElementById("edit-position").value = btn.dataset.position;
-    document.getElementById("edit-project").value = btn.dataset.project;
-    document.getElementById("edit-testimonial").value = btn.dataset.testimonial;
-
-    const img = document.getElementById("current-picture");
-    img.src = btn.dataset.picture ? `/static/${btn.dataset.picture}` : "";
-    img.style.display = btn.dataset.picture ? "block" : "none";
-
-    document.getElementById("editModal").style.display = "block";
-  };
-});
-
-// Open Delete Modal
-document.querySelectorAll(".delete-btn").forEach(btn => {
-  btn.onclick = () => {
-    document.getElementById("delete-id").value = btn.dataset.id;
-    document.getElementById("deleteModal").style.display = "block";
-  };
-});
-
-// Close Modals
-document.getElementById("closeAddModal").onclick = () => document.getElementById("addModal").style.display = "none";
-document.getElementById("closeEditModal").onclick = () => document.getElementById("editModal").style.display = "none";
-document.getElementById("closeDeleteModal").onclick = () => document.getElementById("deleteModal").style.display = "none";
-
-// Close modals on outside click
-window.onclick = event => {
-  document.querySelectorAll(".modal").forEach(m => {
-    if(event.target === m) m.style.display = "none";
+    const imgUrl = this.dataset.picture || '';
+    const preview = document.getElementById('testimonial-image-preview');
+    if (imgUrl) {
+      preview.src = imgUrl;
+      preview.style.display = 'block';
+    } else {
+      preview.style.display = 'none';
+    }
   });
-};
+});
+
+/* ==========================
+   Delete Modal Logic
+========================== */
+function openDeleteModal(id) {
+  document.getElementById('delete-testimonial-id').value = id;
+  document.getElementById('delete-testimonial-modal').classList.add('show');
+}
+function closeDeleteModal() {
+  document.getElementById('delete-testimonial-modal').classList.remove('show');
+}
+
+document.querySelectorAll('.close-btn').forEach(btn => {
+  btn.addEventListener('click', () => btn.closest('.modal').classList.remove('show'));
+});
+
+/* ==========================
+   Add Modal
+========================== */
+document.getElementById('add-testimonial-btn').addEventListener('click', () => {
+  document.getElementById('add-testimonial-modal').classList.add('show');
+});
+
+/* ==========================
+   Live Search (Full columns)
+========================== */
+document.addEventListener("DOMContentLoaded", () => {
+  const searchInput = document.getElementById("search-input");
+  const searchBtn = document.getElementById("search-btn");
+  const rows = document.querySelectorAll("#testimonial-table tbody tr");
+
+  function filter() {
+    const q = searchInput.value.toLowerCase().trim();
+    rows.forEach(row => {
+      const client = row.children[1].textContent.toLowerCase();
+      const workplace = row.children[2].textContent.toLowerCase();
+      const position = row.children[3].textContent.toLowerCase();
+      const project = row.children[4].textContent.toLowerCase();
+      const testimonial = row.children[6].textContent.toLowerCase();
+      const date = row.children[7].textContent.toLowerCase();
+
+      if (client.includes(q) || workplace.includes(q) || position.includes(q) || project.includes(q) || testimonial.includes(q) || date.includes(q)) {
+        row.style.display = "";
+      } else {
+        row.style.display = "none";
+      }
+    });
+  }
+
+  searchInput.addEventListener("keyup", filter);
+  searchBtn.addEventListener("click", filter);
+
+  searchInput.addEventListener("keydown", function(e) {
+    if (e.key === "Escape") {
+      this.value = "";
+      rows.forEach(r => r.style.display = "");
+    }
+  });
+});
 </script>
 {% endblock %}

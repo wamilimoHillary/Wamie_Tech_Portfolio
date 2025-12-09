@@ -23,11 +23,11 @@
 .testimonial-card-container {
     display: flex;
     justify-content: center;
-    background-color: var(--bg-color3);
+    background-color: var( --bg-gradient);
 }
 
 .testimonial-card {
-    background: var(--bg-color3);
+    background: var(--bg-gradient);
     box-shadow: 0 4px 8px var(--box-shadow-color);
     text-align: center;
     max-width: 120%;

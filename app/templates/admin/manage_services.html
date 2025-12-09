@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/user_management.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_forms.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/search_bar.css') }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
 {% endblock %}
@@ -15,41 +16,47 @@
 <div class="admin-container" style="margin:5px;">
   <section class="user-management">
     <h2>Service Management</h2>
-    
+
     <div class="add-btn-container">
       <button id="add-service-btn" class="add-btn"><i class="fas fa-plus"></i> Add Service</button>
     </div>
 
-    <div class="wrap-items">
-      <div class="user-search-bar">
-        <form method="GET">
-          <input type="text" id="search-bar" name="search" placeholder="Search services by name or price...">
-          <button type="submit" class="search-btn">Search</button>
-        </form>
+    <!-- SEARCH BAR -->
+    <div class="search_container">
+      <div class="search_bar">
+        <button type="button" class="search_btn" id="search-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 
+            3.85a1 1 0 0 0 1.415-1.415l-3.85-3.85zm-5.242.656a5 
+            5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+          </svg>
+        </button>
+        <input type="text" class="search_input" placeholder="Search service by name or description" id="search-input">
       </div>
     </div>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-      <div class="flash-messages">
-        {% for category, message in messages %}
-        <div class="flash {{ category }}">{{ message }}</div>
-        {% endfor %}
-      </div>
-      {% endif %}
+    {% if messages %}
+    <div class="flash-messages">
+      {% for category, message in messages %}
+      <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
     {% endwith %}
 
     <div class="user-table-wrapper">
-      <table class="user-table">
+      <table class="user-table" id="services-table">
         <thead>
           <tr>
             <th>No</th>
             <th>Service Name</th>
             <th>Description</th>
-            <th>Price</th>
+            <th>Price (Ksh)</th>
             <th>Actions</th>
           </tr>
         </thead>
+
         <tbody>
           {% for service in services %}
           <tr>
@@ -57,89 +64,104 @@
             <td>{{ service[1] }}</td>
             <td>{{ service[2] }}</td>
             <td>{{ service[3] }}</td>
+
             <td class="action">
               <button class="edit-btn"
-                      data-id="{{ service[0] }}"
-                      data-name="{{ service[1] }}"
-                      data-description="{{ service[2] }}"
-                      data-price="{{ service[3] }}">
+                data-id="{{ service[0] }}"
+                data-name="{{ service[1] }}"
+                data-description="{{ service[2] }}"
+                data-price="{{ service[3] }}">
                 <i class="fas fa-edit"></i> Edit
               </button>
 
               <button class="delete-btn"
-                      onclick="openDeleteModal('{{ service[0] }}')">
+                data-id="{{ service[0] }}"
+                onclick="openDeleteModal('{{ service[0] }}')">
                 <i class="fas fa-trash"></i> Delete
               </button>
             </td>
           </tr>
           {% endfor %}
         </tbody>
+
       </table>
     </div>
+
   </section>
 </div>
 
-<!-- ADD SERVICE MODAL -->
+
+<!-- ===============================
+     ADD SERVICE MODAL (STATUS REMOVED)
+================================= -->
 <div id="add-service-modal" class="modal">
   <div class="modal-content">
     <span class="close-btn">&times;</span>
+
     <h2 class="form-title">Add Service</h2>
 
     <form action="{{ url_for('admin.add_service') }}" method="POST" class="form">
 
-      <!-- FLOATING LABEL SERVICE NAME -->
       <div class="form-group">
-        <input type="text" name="service_name" id="add-service-name" class="form-input" placeholder=" " required>
+        <input type="text" name="service_name" id="add-service-name" class="form-input" required placeholder=" ">
         <label for="add-service-name" class="form-label">Service Name</label>
       </div>
 
-      <!-- FLOATING LABEL DESCRIPTION -->
       <div class="form-group">
-        <textarea name="service_description" id="add-service-description" class="form-input" placeholder=" " required></textarea>
+        <textarea name="service_description" id="add-service-description" class="form-input" required placeholder=" "></textarea>
         <label for="add-service-description" class="form-label">Description</label>
       </div>
 
-      <!-- FLOATING LABEL PRICE -->
       <div class="form-group">
-        <input type="number" name="service_price" id="add-service-price" class="form-input" placeholder=" " required>
-        <label for="add-service-price" class="form-label">Price</label>
+        <input type="number" name="service_price" id="add-service-price" class="form-input" required placeholder=" ">
+        <label for="add-service-price" class="form-label">Price (Ksh)</label>
       </div>
 
       <button type="submit" class="form-button">Add Service</button>
     </form>
+
   </div>
 </div>
 
-<!-- EDIT SERVICE MODAL -->
+
+<!-- ===============================
+     UPDATE SERVICE MODAL (STATUS REMOVED)
+================================= -->
 <div id="update-service-modal" class="modal">
   <div class="modal-content">
     <span class="close-btn">&times;</span>
+
     <h2 class="form-title">Edit Service</h2>
 
     <form action="{{ url_for('admin.update_service') }}" method="POST" class="form">
+
       <input type="hidden" name="service_id" id="service-id">
 
       <div class="form-group">
-        <input type="text" name="service_name" id="service-name" class="form-input" placeholder=" " required>
+        <input type="text" name="service_name" id="service-name" class="form-input" required placeholder=" ">
         <label for="service-name" class="form-label">Service Name</label>
       </div>
 
       <div class="form-group">
-        <textarea name="service_description" id="service-description" class="form-input" placeholder=" " required></textarea>
+        <textarea name="service_description" id="service-description" class="form-input" required placeholder=" "></textarea>
         <label for="service-description" class="form-label">Description</label>
       </div>
 
       <div class="form-group">
-        <input type="number" name="service_price" id="service-price" class="form-input" placeholder=" " required>
-        <label for="service-price" class="form-label">Price</label>
+        <input type="number" name="service_price" id="service-price" class="form-input" required placeholder=" ">
+        <label for="service-price" class="form-label">Price (Ksh)</label>
       </div>
 
       <button type="submit" class="form-button">Update</button>
     </form>
+
   </div>
 </div>
 
-<!-- DELETE MODAL -->
+
+<!-- ===============================
+     DELETE SERVICE MODAL
+================================= -->
 <div id="delete-service-modal" class="modal">
   <div class="modal-content">
     <span class="close-btn">&times;</span>
@@ -148,10 +170,10 @@
 
     <form action="{{ url_for('admin.delete_service') }}" method="POST" class="form">
       <input type="hidden" name="service_id" id="delete-service-id">
-
       <button type="submit" class="form-button danger">Delete</button>
       <button type="button" class="form-button" onclick="closeDeleteModal()">Cancel</button>
     </form>
+
   </div>
 </div>
 
@@ -160,13 +182,20 @@
 {% block scripts %}
 <script>
 
-/* ================================
-   EDIT BUTTON → OPEN MODAL + FILL
-================================ */
-document.querySelectorAll('.edit-btn').forEach(button => {
-  button.addEventListener('click', function() {
-    const modal = document.getElementById('update-service-modal');
-    modal.classList.add('show');
+/* ============================
+   Open Add Modal
+============================ */
+document.getElementById('add-service-btn').addEventListener('click', () => {
+  document.getElementById('add-service-modal').classList.add('show');
+});
+
+/* ============================
+   Load Edit Modal
+============================ */
+document.querySelectorAll('.edit-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+
+    document.getElementById('update-service-modal').classList.add('show');
 
     document.getElementById('service-id').value = this.dataset.id;
     document.getElementById('service-name').value = this.dataset.name;
@@ -175,44 +204,52 @@ document.querySelectorAll('.edit-btn').forEach(button => {
   });
 });
 
-/* DELETE MODAL */
+/* ============================
+   Delete Modal
+============================ */
 function openDeleteModal(id) {
   document.getElementById('delete-service-id').value = id;
   document.getElementById('delete-service-modal').classList.add('show');
 }
-
 function closeDeleteModal() {
   document.getElementById('delete-service-modal').classList.remove('show');
 }
 
-/* CLOSE BUTTONS */
 document.querySelectorAll('.close-btn').forEach(btn => {
   btn.addEventListener('click', () => btn.closest('.modal').classList.remove('show'));
 });
 
-/* CLICK OUTSIDE CLOSE */
-window.addEventListener('click', e => {
-  document.querySelectorAll('.modal').forEach(m => {
-    if (e.target === m) m.classList.remove('show');
-  });
-});
+/* ===========================================
+   RESPONSIVE SEARCH (Name + Description + Price)
+=========================================== */
+document.addEventListener("DOMContentLoaded", () => {
+    const searchInput = document.getElementById("search-input");
+    const searchBtn = document.getElementById("search-btn");
+    const rows = document.querySelectorAll("#services-table tbody tr");
 
-document.getElementById('add-service-btn').addEventListener('click', () => {
-  document.getElementById('add-service-modal').classList.add('show');
-});
+    function filter() {
+        const q = searchInput.value.toLowerCase().trim();
+        rows.forEach(row => {
+            const name = row.children[1].textContent.toLowerCase();
+            const desc = row.children[2].textContent.toLowerCase();
+            const price = row.children[3].textContent.toLowerCase();
+            if (name.includes(q) || desc.includes(q) || price.includes(q)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    }
 
-/* LIVE SEARCH */
-const searchInput = document.getElementById('search-bar');
-const tableBody = document.querySelector('.user-table tbody');
+    searchInput.addEventListener("keyup", filter);
+    searchBtn.addEventListener("click", filter);
 
-searchInput.addEventListener('input', function() {
-  const filter = this.value.trim().toLowerCase();
-  const rows = tableBody.querySelectorAll('tr');
-
-  rows.forEach(row => {
-    const text = row.innerText.toLowerCase();
-    row.style.display = text.includes(filter) ? '' : 'none';
-  });
+    searchInput.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") {
+            this.value = "";
+            rows.forEach(r => r.style.display = "");
+        }
+    });
 });
 
 </script>

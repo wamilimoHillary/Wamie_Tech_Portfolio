@@ -1,23 +1,34 @@
 from flask import Blueprint, render_template
 from app.database import get_db_connection
 
-# Create a Blueprint for project routes
 project_bp = Blueprint('project', __name__)
 
 @project_bp.route('/projects')
 def projects():
     try:
-        # Try fetching projects from Supabase
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM projects;")
+
+        # Fetch all projects
+        cursor.execute("""
+            SELECT project_id, project_name, project_description, project_status, project_link, date_created, project_type 
+            FROM projects
+            ORDER BY date_created DESC;
+        """)
         projects_data = cursor.fetchall()
+
+        # Fetch distinct project types for dynamic filters
+        cursor.execute("SELECT DISTINCT project_type FROM projects;")
+        project_types = [row[0] for row in cursor.fetchall()]
+
         cursor.close()
         conn.close()
 
-        # Render data if successful
-        return render_template('main/projects.html', projects=projects_data)
+        return render_template(
+            'main/projects.html',
+            projects=projects_data,
+            project_types=project_types
+        )
 
-    except ConnectionError as e:
-        # Render friendly error page if Supabase not reachable
+    except Exception as e:
         return render_template('errors/db_error.html', message=str(e)), 503

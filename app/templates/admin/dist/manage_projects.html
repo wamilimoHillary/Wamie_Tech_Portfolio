@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/user_management.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_forms.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/search_bar.css') }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
 {% endblock %}
@@ -19,33 +20,29 @@
       <button id="add-project-btn" class="add-btn"><i class="fas fa-plus"></i> Add Project</button>
     </div>
 
-    <div class="wrap-items">
-      <div class="user-search-bar">
-        <form method="GET">
-          <input type="text" id="search-bar" name="search" placeholder="Search projects by name or status...">
-          <button type="submit" class="search-btn">Search</button>
-        </form>
+    <!-- Refactored Search Bar -->
+    <div class="search_container">
+      <div class="search_bar">
+        <button type="button" class="search_btn" id="search-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 
+            3.85a1 1 0 0 0 1.415-1.415l-3.85-3.85zm-5.242.656a5 
+            5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+          </svg>
+        </button>
+        <input type="text" class="search_input" placeholder="Search project by name, status or type" id="search-input">
       </div>
     </div>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    <div class="flash-messages">
-      {% for category, message in messages %}
-      <div class="flash {{ category }}">{{ message }}</div>
-      {% endfor %}
-    </div>
-    {% endif %}
-    {% endwith %}
-
     <div class="user-table-wrapper">
-      <table class="user-table">
+      <table class="user-table" id="projects-table">
         <thead>
           <tr>
             <th>No</th>
             <th>Project Name</th>
             <th>Description</th>
             <th>Status</th>
+            <th>Type</th>
             <th>Link</th>
             <th>Created At</th>
             <th>Actions</th>
@@ -54,11 +51,12 @@
 
         <tbody>
           {% for project in projects %}
-          <tr>
+          <tr data-type="{{ project[6] }}">
             <td>{{ loop.index }}</td>
             <td>{{ project[1] }}</td>
             <td>{{ project[2] }}</td>
             <td>{{ project[3] }}</td>
+            <td>{{ project[6] }}</td>
             <td><a href="{{ project[4] }}" target="_blank">View</a></td>
             <td>{{ project[5] }}</td>
             <td class="action">
@@ -67,10 +65,10 @@
                 data-name="{{ project[1] }}"
                 data-description="{{ project[2] }}"
                 data-status="{{ project[3] }}"
-                data-link="{{ project[4] }}">
+                data-link="{{ project[4] }}"
+                data-type="{{ project[6] }}">
                 <i class="fas fa-edit"></i> Edit
               </button>
-
               <button class="delete-btn"
                 data-id="{{ project[0] }}"
                 onclick="openDeleteModal('{{ project[0] }}')">
@@ -87,20 +85,15 @@
   </section>
 </div>
 
-
-
-
 <!-- ===============================
-     ADD PROJECT MODAL (Fixed)
+     ADD PROJECT MODAL
 ================================= -->
 <div id="add-project-modal" class="modal">
   <div class="modal-content">
     <span class="close-btn">&times;</span>
-
     <h2 class="form-title">Add Project</h2>
 
     <form action="{{ url_for('admin.add_project') }}" method="POST" class="form">
-
       <div class="form-group">
         <input type="text" name="project_name" id="add-project-name" class="form-input" required placeholder=" ">
         <label for="add-project-name" class="form-label">Project Name</label>
@@ -122,30 +115,36 @@
       </div>
 
       <div class="form-group">
+        <select name="project_type" id="add-project-type" class="form-input" required>
+          <option value="" disabled selected hidden></option>
+          <option value="Web">Web</option>
+          <option value="Mobile">Mobile</option>
+          <option value="AI">AI</option>
+          <option value="Poster">Poster</option>
+          <option value="Other">Other</option>
+        </select>
+        <label for="add-project-type" class="form-label">Type</label>
+      </div>
+
+      <div class="form-group">
         <input type="url" name="project_link" id="add-project-link" class="form-input" placeholder=" ">
         <label for="add-project-link" class="form-label">Project Link</label>
       </div>
 
       <button type="submit" class="form-button">Add Project</button>
     </form>
-
   </div>
 </div>
 
-
-
-
 <!-- ===============================
-     UPDATE PROJECT MODAL (Fixed)
+     UPDATE PROJECT MODAL
 ================================= -->
 <div id="update-project-modal" class="modal">
   <div class="modal-content">
     <span class="close-btn">&times;</span>
-
     <h2 class="form-title">Edit Project</h2>
 
     <form action="{{ url_for('admin.update_project') }}" method="POST" class="form">
-
       <input type="hidden" name="project_id" id="project-id">
 
       <div class="form-group">
@@ -169,18 +168,25 @@
       </div>
 
       <div class="form-group">
+        <select name="project_type" id="project-type" class="form-input" required>
+          <option value="" disabled selected hidden></option>
+          <option value="Web">Web</option>
+          <option value="Mobile">Mobile</option>
+          <option value="AI">AI</option>
+          <option value="Other">Other</option>
+        </select>
+        <label for="project-type" class="form-label">Type</label>
+      </div>
+
+      <div class="form-group">
         <input type="url" name="project_link" id="project-link" class="form-input" placeholder=" ">
         <label for="project-link" class="form-label">Project Link</label>
       </div>
 
       <button type="submit" class="form-button">Update</button>
     </form>
-
   </div>
 </div>
-
-
-
 
 <!-- ===============================
      DELETE PROJECT MODAL
@@ -196,10 +202,8 @@
       <button type="submit" class="form-button danger">Delete</button>
       <button type="button" class="form-button" onclick="closeDeleteModal()">Cancel</button>
     </form>
-
   </div>
 </div>
-
 {% endblock %}
 
 {% block scripts %}
@@ -216,27 +220,31 @@ document.querySelectorAll('.edit-btn').forEach(button => {
     document.getElementById('project-name').value = this.dataset.name;
     document.getElementById('project-description').value = this.dataset.description;
     document.getElementById('project-status').value = this.dataset.status;
+    document.getElementById('project-type').value = this.dataset.type;
     document.getElementById('project-link').value = this.dataset.link;
   });
 });
 
-
+/* ============================
+   Delete Modal
+============================ */
 function openDeleteModal(id) {
   document.getElementById('delete-project-id').value = id;
   document.getElementById('delete-project-modal').classList.add('show');
 }
-
 function closeDeleteModal() {
   document.getElementById('delete-project-modal').classList.remove('show');
 }
 
+/* ============================
+   Close Modals
+============================ */
 document.querySelectorAll('.close-btn').forEach(btn => {
   btn.addEventListener('click', () => btn.closest('.modal').classList.remove('show'));
 });
-
 window.addEventListener('click', e => {
   document.querySelectorAll('.modal').forEach(m => {
-    if (e.target === m) m.classList.remove('show');
+    if(e.target === m) m.classList.remove('show');
   });
 });
 
@@ -248,27 +256,41 @@ document.getElementById('add-project-btn').addEventListener('click', () => {
 });
 
 /* ============================
-   Instant Search
+   Search Projects
 ============================ */
-const searchInput = document.getElementById('search-bar');
-const tableBody = document.querySelector('.user-table tbody');
+document.addEventListener("DOMContentLoaded", () => {
+    const searchInput = document.getElementById("search-input");
+    const searchBtn = document.getElementById("search-btn");
+    const rows = document.querySelectorAll("#projects-table tbody tr");
 
-searchInput.addEventListener('input', function() {
-  const filter = this.value.trim().toLowerCase();
-  const rows = tableBody.querySelectorAll('tr');
+    function filterRows(query){
+        rows.forEach(row => {
+            const name = row.children[1].textContent.toLowerCase();
+            const status = row.children[3].textContent.toLowerCase();
+            const type = row.children[4].textContent.toLowerCase();
+            row.style.display = (name.includes(query) || status.includes(query) || type.includes(query)) ? "" : "none";
+        });
+    }
 
-  rows.forEach(row => {
-    const cells = row.querySelectorAll('td');
-    let match = false;
+    searchInput.addEventListener("keyup", () => filterRows(searchInput.value.toLowerCase().trim()));
+    searchBtn.addEventListener("click", () => filterRows(searchInput.value.toLowerCase().trim()));
 
-    cells.forEach(cell => {
-      if (cell.textContent.trim().toLowerCase().includes(filter)) {
-        match = true;
-      }
+    searchInput.addEventListener("keydown", function(e){
+        if(e.key === "Escape"){
+            this.value = "";
+            rows.forEach(row => row.style.display = "");
+        }
     });
 
-    row.style.display = match ? '' : 'none';
-  });
+    // Format date column
+    rows.forEach(row => {
+        const dateCell = row.children[6]; // now 7th column
+        const rawDate = dateCell.textContent.trim();
+        if(!rawDate) return;
+        const parsed = new Date(rawDate);
+        if(isNaN(parsed)) return;
+        dateCell.textContent = parsed.toLocaleDateString("en-US", {year:"numeric", month:"short", day:"numeric"});
+    });
 });
 </script>
 {% endblock %}

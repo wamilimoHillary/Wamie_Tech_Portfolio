@@ -22,6 +22,7 @@
 
 .modal-content{
     background: var(--bg-gradient);
+    margin: auto 5px;
 }
 
 /* -----------------------------

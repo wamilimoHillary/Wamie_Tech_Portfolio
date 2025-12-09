@@ -169,6 +169,8 @@ def manage_projects():
 
     return render_template('admin/manage_projects.html', projects=projects)
 
+
+# Route to add project
 # Route to add project
 @admin.route('/add_project', methods=['POST'])
 @login_required
@@ -177,24 +179,24 @@ def add_project():
     project_description = request.form['project_description']
     project_status = request.form['project_status']
     project_link = request.form['project_link']
+    project_type = request.form['project_type']  # new field
 
     try:
-        # Insert the new project into the database
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute("""
-            INSERT INTO projects (project_name, project_description, project_status, project_link, date_created)
-            VALUES (%s, %s, %s, %s, NOW())
-        """, (project_name, project_description, project_status, project_link))
+            INSERT INTO projects (project_name, project_description, project_status, project_link, project_type, date_created)
+            VALUES (%s, %s, %s, %s, %s, NOW())
+        """, (project_name, project_description, project_status, project_link, project_type))
         conn.commit()
         cursor.close()
         conn.close()
-
         flash("Project added successfully!", "success")
     except Exception as e:
         flash(f"An error occurred: {str(e)}", "error")
 
     return redirect(url_for('admin.manage_projects'))
+
 
 # Route to update project
 @admin.route('/update_project', methods=['POST'])
@@ -204,6 +206,7 @@ def update_project():
     project_name = request.form.get('project_name')
     project_description = request.form.get('project_description')
     project_status = request.form.get('project_status')
+    project_type = request.form.get('project_type')  # new field
     project_link = request.form.get('project_link')
 
     try:
@@ -212,9 +215,10 @@ def update_project():
         cursor = conn.cursor()
         cursor.execute("""
             UPDATE projects
-            SET project_name = %s, project_description = %s, project_status = %s, project_link = %s
+            SET project_name = %s, project_description = %s, project_status = %s,
+                project_type = %s, project_link = %s
             WHERE project_id = %s
-        """, (project_name, project_description, project_status, project_link, project_id))
+        """, (project_name, project_description, project_status, project_type, project_link, project_id))
         conn.commit()
         cursor.close()
         conn.close()
@@ -224,6 +228,7 @@ def update_project():
         flash(f"An error occurred while updating the project: {str(e)}", "danger")
 
     return redirect(url_for('admin.manage_projects'))
+
 
 # Route to delete project
 @admin.route('/delete_project', methods=['POST'])
@@ -593,3 +598,92 @@ def delete_testimonial():
         flash("Invalid testimonial ID.", "error")
     return redirect(url_for('admin.manage_testimonials'))
 
+@admin.route('/add_testimonial', methods=['POST'])
+@login_required
+def add_testimonial():
+    client_name = request.form.get('client_name')
+    workplace = request.form.get('workplace')
+    position = request.form.get('position')
+    project_worked_on = request.form.get('project_worked_on')
+    testimonial_text = request.form.get('testimonial_text')
+
+    # File handling
+    image_file = request.files.get('client_picture')
+    image_url = None
+
+    if image_file and image_file.filename:
+        if allowed_file(image_file.filename):
+            filename = secure_filename(image_file.filename)
+            full_path = os.path.join(UPLOAD_FOLDER, filename)
+            image_file.save(full_path)
+            image_url = f"images/{filename}"
+        else:
+            flash("Invalid image type. Allowed: png, jpg, jpeg, gif", "error")
+            return redirect(url_for('admin.manage_testimonials'))
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO clients_testimonial 
+            (client_name, client_picture, workplace, position, project_worked_on, testimonial_text, date_added)
+            VALUES (%s, %s, %s, %s, %s, %s, NOW())
+        """, (client_name, image_url, workplace, position, project_worked_on, testimonial_text))
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        flash("Testimonial added successfully!", "success")
+    except Exception as e:
+        flash(f"An error occurred: {str(e)}", "danger")
+
+    return redirect(url_for('admin.manage_testimonials'))
+
+@admin.route('/update_testimonial', methods=['POST'])
+@login_required
+def update_testimonial():
+    testimonial_id = request.form.get('testimonial_id')
+    client_name = request.form.get('client_name')
+    workplace = request.form.get('workplace')
+    position = request.form.get('position')
+    project_worked_on = request.form.get('project_worked_on')
+    testimonial_text = request.form.get('testimonial_text')
+
+    image_file = request.files.get('client_picture')
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Fetch current image
+        cursor.execute("SELECT client_picture FROM clients_testimonial WHERE testimonial_id = %s", (testimonial_id,))
+        current_image = cursor.fetchone()[0]
+
+        # Handle new image upload
+        if image_file and image_file.filename:
+            if allowed_file(image_file.filename):
+                filename = secure_filename(image_file.filename)
+                full_path = os.path.join(UPLOAD_FOLDER, filename)
+                image_file.save(full_path)
+                image_url = f"images/{filename}"
+            else:
+                flash("Invalid image type. Allowed: png, jpg, jpeg, gif", "error")
+                return redirect(url_for('admin.manage_testimonials'))
+        else:
+            image_url = current_image  # Keep old image if no new upload
+
+        # Update record
+        cursor.execute("""
+            UPDATE clients_testimonial
+            SET client_name=%s, client_picture=%s, workplace=%s, position=%s,
+                project_worked_on=%s, testimonial_text=%s
+            WHERE testimonial_id=%s
+        """, (client_name, image_url, workplace, position, project_worked_on, testimonial_text, testimonial_id))
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        flash("Testimonial updated successfully!", "success")
+    except Exception as e:
+        flash(f"An error occurred: {str(e)}", "danger")
+
+    return redirect(url_for('admin.manage_testimonials'))

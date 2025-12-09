@@ -2,32 +2,98 @@
 
 {% block content %}
 {% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/projects.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/projects.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/search_bar.css') }}">
 {% endblock %}
 
-<main style="overflow-x:hidden;">
+<style>
+/* ---------------------------
+   MODAL & BUTTON STYLES
+---------------------------- */
+.modal { 
+    display:none; 
+    position:fixed; 
+    z-index:9999; 
+    left:0; top:0; 
+    width:100%; height:100%; 
+    backdrop-filter: blur(3px); 
+    background: rgba(0,0,0,0.4); 
+    justify-content:center; align-items:center;
+}
+.modal_content { 
+    background: var(--bg2-color); 
+    padding:20px; 
+    width:90%; max-width:500px; 
+    border-radius:8px; 
+    box-shadow:0 4px 12px var(--box-shadow-color); 
+    animation:fadeIn 0.3s ease;
+}
+.close_modal { 
+    float:right; font-size:24px; cursor:pointer; 
+    color: var(--accent-color); font-weight:bolder; 
+}
+.modal_title { 
+    margin-bottom:15px; font-size:20px; font-weight:700; color:var(--text-color3);
+}
+.modal_filter_buttons { display:flex; gap:10px; flex-wrap:wrap; }
+.filter_btn { 
+    padding:8px 14px; background: var(--bg-color3); color:var(--text-color); 
+    border:1px solid var(--border-color); border-radius:6px; cursor:pointer; 
+    transition: all 0.2s ease;
+}
+.filter_btn:hover { background: var(--accent-color); color: var(--text-color); opacity: var(--button-hover-opacity); }
+.filter_btn.active { background: var(--accent-color); color: var(--text-color); border-color: var(--accent-color); }
 
+@keyframes fadeIn { from {opacity:0; transform:scale(0.95);} to{opacity:1; transform:scale(1);} }
+
+/* ---------------------------
+   Table Wrapper for Scroll
+---------------------------- */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 20px;
+}
+</style>
+
+<main>
 <section class="project_section">
 
-    <!-- Searchbar -->
+    <!-- SEARCH BAR -->
     <div class="search_container">
         <form class="search_bar" onsubmit="event.preventDefault();">
             <input type="text" class="search_input" placeholder="Search project by name or Status">
             <button type="submit" class="search_btn">
-                <!-- Search Icon -->
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 
-                    3.85a1 1 0 0 0 1.415-1.415l-3.85-3.85zm-5.242.656a5 
-                    5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.85-3.85zm-5.242.656a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
                 </svg>
             </button>
         </form>
     </div>
 
-    <!-- Table Container -->
-    <div class="table-container">
+    <!-- MAIN FILTER BUTTONS -->
+    <div class="project_filter_buttons">
+        <button id="btnAll" class="filter_btn" data-type="all">All</button>
+        <button id="openFilterModal" class="filter_btn">Advanced Filters</button>
+    </div>
 
+    <!-- MODAL -->
+    <div id="filterModal" class="modal">
+        <div class="modal_content">
+            <span class="close_modal">&times;</span>
+            <h3 class="modal_title">Advanced Project Filters</h3>
+            <div class="modal_filter_buttons">
+                {% for type in project_types %}
+                <button class="filter_btn modal_filter" data-type="{{ type }}">{{ type | capitalize }}</button>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- TABLE WRAPPER -->
+    <div class="table-wrapper">
         <table class="projects_table">
             <thead>
                 <tr>
@@ -39,87 +105,68 @@
                     <th>Date Created</th>
                 </tr>
             </thead>
-
             <tbody>
                 {% for project in projects %}
-                <tr>
-                    <!-- Auto numbering instead of project ID -->
+                <tr data-type="{{ project[6] }}">
                     <td>{{ loop.index }}</td>
-
                     <td>{{ project[1] }}</td>
                     <td>{{ project[2] }}</td>
                     <td>{{ project[3] }}</td>
-                    <td>
-                        {% if project[4] %}
-                        <a href="{{ project[4] }}" target="_blank">View</a>
-                        {% else %}
-                        N/A
-                        {% endif %}
-                    </td>
+                    <td>{% if project[4] %}<a href="{{ project[4] }}" target="_blank">View</a>{% else %}N/A{% endif %}</td>
                     <td>{{ project[5] }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
-
         </table>
     </div>
 
 </section>
-
 </main>
 
-<!-- 
-    Live Search Filter (Projects Page)
-    ----------------------------------
-    This script enables real-time filtering of table rows based on 
-    project name or status. It listens for input events on the search 
-    bar and dynamically shows/hides rows to provide an instant, 
-    smooth search experience without reloading the page.
--->
+<!-- JS LOGIC -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    const searchInput = document.querySelector(".search_input");
+    const filterModal = document.getElementById("filterModal");
+    const openFilterModal = document.getElementById("openFilterModal");
+    const closeModal = document.querySelector(".close_modal");
     const rows = document.querySelectorAll(".projects_table tbody tr");
 
+    openFilterModal.onclick = () => filterModal.style.display = "flex";
+    closeModal.onclick = () => filterModal.style.display = "none";
+    window.onclick = (e) => { if(e.target === filterModal) filterModal.style.display = "none"; };
+
+    // Search
+    const searchInput = document.querySelector(".search_input");
     searchInput.addEventListener("keyup", function () {
         const query = this.value.toLowerCase().trim();
-
         rows.forEach(row => {
             const name = row.children[1].textContent.toLowerCase();
             const status = row.children[3].textContent.toLowerCase();
-
-            if (name.includes(query) || status.includes(query)) {
-                row.style.display = "";
-            } else {
-                row.style.display = "none";
-            }
+            row.style.display = (name.includes(query) || status.includes(query)) ? "" : "none";
         });
     });
-});
 
+    // Filters
+    const topAllBtn = document.getElementById("btnAll");
+    const modalButtons = document.querySelectorAll(".modal_filter");
 
-// Format date column (user friendly)
-document.addEventListener("DOMContentLoaded", () => {
-    const tableRows = document.querySelectorAll(".projects_table tbody tr");
+    topAllBtn.addEventListener("click", () => rows.forEach(row => row.style.display = ""));
+    modalButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const type = btn.dataset.type;
+            rows.forEach(row => row.style.display = (type === "all" || row.dataset.type === type) ? "" : "none");
+            filterModal.style.display = "none";
+        });
+    });
 
-    tableRows.forEach(row => {
-        const dateCell = row.children[5];  // Date column
+    // Date formatting
+    rows.forEach(row => {
+        const dateCell = row.children[5];
         let rawDate = dateCell.textContent.trim();
-
         if (!rawDate) return;
-
         const parsed = new Date(rawDate);
-
-        // If invalid date, skip
         if (isNaN(parsed)) return;
-
-        const options = { 
-            year: "numeric", 
-            month: "short", 
-            day: "numeric"
-        };
-
-        dateCell.textContent = parsed.toLocaleDateString("en-US", options);
+        dateCell.textContent = parsed.toLocaleDateString("en-US", {year:"numeric",month:"short",day:"numeric"});
     });
 });
 </script>

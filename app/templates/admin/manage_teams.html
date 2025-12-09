@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/colors.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/user_management.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_forms.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/search_bar.css') }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
 {% endblock %}
@@ -20,13 +21,18 @@
       <button id="add-team-btn" class="add-btn"><i class="fas fa-plus"></i> Add Team Member</button>
     </div>
 
-    <!-- Search Bar -->
-    <div class="wrap-items">
-      <div class="user-search-bar">
-        <form method="GET">
-          <input type="text" id="search-bar" name="search" placeholder="Search team members by name or role...">
-          <button type="submit" class="search-btn">Search</button>
-        </form>
+    <!-- Search Bar (NEW MATCHED STYLE) -->
+    <div class="search_container">
+      <div class="search_bar">
+        <button type="button" class="search_btn" id="search-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 
+            3.85a1 1 0 0 0 1.415-1.415l-3.85-3.85zm-5.242.656a5 
+            5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+          </svg>
+        </button>
+
+        <input type="text" class="search_input" placeholder="Search team by name, professionalism, or role..." id="search-input">
       </div>
     </div>
 
@@ -43,7 +49,7 @@
 
     <!-- Table Wrapper -->
     <div class="user-table-wrapper">
-      <table class="user-table">
+      <table class="user-table" id="team-table">
         <thead>
           <tr>
             <th>No</th>
@@ -55,6 +61,7 @@
             <th>Actions</th>
           </tr>
         </thead>
+
         <tbody>
           {% for team in teams %}
           <tr>
@@ -62,7 +69,11 @@
             <td>{{ team[1] }}</td>
             <td>{{ team[2] }}</td>
             <td>{{ team[3] }}</td>
-            <td><img src="{{ url_for('static', filename=team[5]) }}" alt="Team Image" style="width:50px;height:50px;border-radius:6px;"></td>
+            <td>
+              <img src="{{ url_for('static', filename=team[5]) }}"
+                   alt="Team Image"
+                   style="width:50px;height:50px;border-radius:6px;">
+            </td>
             <td>{{ team[4] }}</td>
             <td class="action">
               <button class="edit-btn"
@@ -73,6 +84,7 @@
                       data-image="{{ url_for('static', filename=team[5]) }}">
                 <i class="fas fa-edit"></i> Edit
               </button>
+
               <button class="delete-btn"
                       data-id="{{ team[0] }}"
                       onclick="openDeleteModal('{{ team[0] }}')">
@@ -82,13 +94,14 @@
           </tr>
           {% endfor %}
         </tbody>
+
       </table>
     </div>
 
   </section>
 </div>
 
-<!-- Add Team Modal -->
+<!-- ADD TEAM MODAL -->
 <div id="add-team-modal" class="modal">
   <div class="modal-content">
     <span class="close-btn">&times;</span>
@@ -121,7 +134,7 @@
   </div>
 </div>
 
-<!-- Edit Team Modal -->
+<!-- EDIT TEAM MODAL -->
 <div id="update-team-modal" class="modal">
   <div class="modal-content">
     <span class="close-btn">&times;</span>
@@ -160,7 +173,7 @@
   </div>
 </div>
 
-<!-- Delete Team Modal -->
+<!-- DELETE MODAL -->
 <div id="delete-team-modal" class="modal">
   <div class="modal-content">
     <span class="close-btn">&times;</span>
@@ -178,6 +191,10 @@
 
 {% block scripts %}
 <script>
+
+/* ============================
+   Edit Modal Logic
+============================ */
 document.querySelectorAll('.edit-btn').forEach(button => {
   button.addEventListener('click', function() {
     const modal = document.getElementById('update-team-modal');
@@ -200,11 +217,13 @@ document.querySelectorAll('.edit-btn').forEach(button => {
   });
 });
 
+/* ============================
+   Delete Modal Logic
+============================ */
 function openDeleteModal(id) {
   document.getElementById('delete-team-id').value = id;
   document.getElementById('delete-team-modal').classList.add('show');
 }
-
 function closeDeleteModal() {
   document.getElementById('delete-team-modal').classList.remove('show');
 }
@@ -213,36 +232,47 @@ document.querySelectorAll('.close-btn').forEach(btn => {
   btn.addEventListener('click', () => btn.closest('.modal').classList.remove('show'));
 });
 
-window.addEventListener('click', e => {
-  document.querySelectorAll('.modal').forEach(m => {
-    if (e.target === m) m.classList.remove('show');
-  });
-});
-
+/* ============================
+   Add Modal
+============================ */
 document.getElementById('add-team-btn').addEventListener('click', () => {
   document.getElementById('add-team-modal').classList.add('show');
 });
 
-// Live Search
-const searchInput = document.getElementById('search-bar');
-const tableBody = document.querySelector('.user-table tbody');
+/* ============================
+   Responsive Live Search (MATCHED STYLE)
+============================ */
+document.addEventListener("DOMContentLoaded", () => {
+    const searchInput = document.getElementById("search-input");
+    const searchBtn = document.getElementById("search-btn");
+    const rows = document.querySelectorAll("#team-table tbody tr");
 
-searchInput.addEventListener('input', function() {
-  const filter = this.value.trim().toLowerCase();
-  const rows = tableBody.querySelectorAll('tr');
+    function filter() {
+        const q = searchInput.value.toLowerCase().trim();
+        rows.forEach(row => {
+            const name = row.children[1].textContent.toLowerCase();
+            const professionalism = row.children[2].textContent.toLowerCase();
+            const role = row.children[3].textContent.toLowerCase();
+            const date = row.children[5].textContent.toLowerCase();
 
-  rows.forEach(row => {
-    const cells = row.querySelectorAll('td');
-    let matchFound = false;
+            if (name.includes(q) || professionalism.includes(q) || role.includes(q) || date.includes(q)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    }
 
-    cells.forEach(cell => {
-      if (cell.textContent.trim().toLowerCase().includes(filter)) {
-        matchFound = true;
-      }
+    searchInput.addEventListener("keyup", filter);
+    searchBtn.addEventListener("click", filter);
+
+    searchInput.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") {
+            this.value = "";
+            rows.forEach(r => r.style.display = "");
+        }
     });
-
-    row.style.display = matchFound ? '' : 'none';
-  });
 });
+
 </script>
 {% endblock %}

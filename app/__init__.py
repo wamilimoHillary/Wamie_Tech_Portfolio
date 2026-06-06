@@ -22,6 +22,8 @@ def create_app():
     from app.routes.auth import auth
     from app.routes.user import user
     from app.routes.admin import admin
+    from app.mpesa.mpesa_routes import mpesa_bp
+
 
     app.register_blueprint(main_bp)
     app.register_blueprint(service_bp)
@@ -31,6 +33,7 @@ def create_app():
     app.register_blueprint(auth)
     app.register_blueprint(user)
     app.register_blueprint(admin)
+    app.register_blueprint(mpesa_bp)
 
     # ============================
     # 🔴 GLOBAL ERROR HANDLERS

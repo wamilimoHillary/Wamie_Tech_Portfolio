@@ -25,12 +25,13 @@ header {
 /* Logo container */
 .logo-container {
     display: flex;
-    align-items: center; /* Centers items vertically */
+    flex-direction: column;
+    align-items: flex-start;
 
 }
 
 .logo-image {
-    width: 10%;
+    width: 20%;
 }
 
 .logo-name {
@@ -105,10 +106,11 @@ nav a {
     font-size: 14px;
     display:flex;
     align-items: center;
+    height: fit-content;
     gap: 5px;
     position:relative;
-    top:1.5rem;
-    left:2%;
+    top:-10px;
+    left:4%;
     box-shadow: 0px 4px 6px var(--box-shadow-color);
 }
 
@@ -428,7 +430,7 @@ footer {
     }
 
     .logo-image {
-    width: 20%;
+    width: 40%;
 }
 
    .menu-btn {

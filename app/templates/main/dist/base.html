@@ -100,14 +100,29 @@
   </div>
 </div>
 
+
 <div id="coffeeModal" class="modal">
   <div class="modal-content coffeeModal">
     <span class="close-btn" data-modal="coffeeModal">&times;</span>
     <h2>Buy Me a Coffee</h2>
     <p>Your support fuels my creativity ☕💡</p>
 
-   
-      <form class="form-container coffee-form-container" method="POST" action="/buy-coffee">
+    <!-- Status alert box — hidden by default -->
+    <div id="coffee-status" style="
+        display:none;
+        margin: 10px 0;
+        padding: 12px 16px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-align: center;
+    "></div>
+
+    <form class="form-container coffee-form-container" 
+          id="coffee-form"
+          method="POST" 
+          action="{{ url_for('mpesa.buy_coffee') }}">
+
       <div class="input-group">
         <input type="tel" id="mpesa-number" name="mpesa-number" placeholder=" " required>
         <label for="mpesa-number">MPESA Number</label>
@@ -118,13 +133,12 @@
         <label for="amount">Amount (KES)</label>
       </div>
 
-      <button type="submit" class="form-button">
+      <button type="submit" class="form-button" id="coffee-pay-btn">
         Pay Now <i class="fas fa-coffee"></i>
       </button>
     </form>
   </div>
 </div>
-
 
 
 

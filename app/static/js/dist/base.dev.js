@@ -1,44 +1,43 @@
 "use strict";
 
+// ── Sidebar ────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", function () {
   var sidebar = document.getElementById("sidebar");
   var menuBtn = document.querySelector(".menu-btn");
-  var links = document.querySelectorAll("#sidebar a"); // Toggle sidebar
-
+  var links = document.querySelectorAll("#sidebar a");
   menuBtn.addEventListener("click", function () {
     sidebar.classList.toggle("active");
-  }); // Remove 'active' class from all links, then add to clicked link
-
+  });
   links.forEach(function (link) {
     link.addEventListener("click", function () {
       links.forEach(function (l) {
         return l.classList.remove("active");
-      }); // Remove from others
-
-      this.classList.add("active"); // Add to clicked link
+      });
+      this.classList.add("active");
     });
   });
-});
-var toggleSwitch = document.getElementById('toggle-dark-mode'); // Check if dark mode was previously enabled and apply it
+}); // ── Dark Mode ───────────────────────────────────────────────
+
+var toggleSwitch = document.getElementById('toggle-dark-mode');
 
 if (localStorage.getItem('dark-mode') === 'enabled') {
   document.body.classList.add('dark-mode');
-  toggleSwitch.checked = true; // Set the checkbox to checked if dark mode is enabled
+  toggleSwitch.checked = true;
 } else {
   document.body.classList.remove('dark-mode');
-  toggleSwitch.checked = false; // Set the checkbox to unchecked if dark mode is disabled
-} // Add event listener to toggle dark mode
-
+  toggleSwitch.checked = false;
+}
 
 toggleSwitch.addEventListener('change', function () {
-  document.body.classList.toggle('dark-mode'); // Save the current state of dark mode in localStorage
+  document.body.classList.toggle('dark-mode');
 
   if (document.body.classList.contains('dark-mode')) {
     localStorage.setItem('dark-mode', 'enabled');
   } else {
     localStorage.setItem('dark-mode', 'disabled');
   }
-});
+}); // ── Modals + Coffee STK feedback ───────────────────────────
+
 document.addEventListener("DOMContentLoaded", function () {
   // Open Hire Me Modal
   document.querySelector(".hire-me").addEventListener("click", function (e) {
@@ -49,14 +48,14 @@ document.addEventListener("DOMContentLoaded", function () {
   document.querySelector(".buy_me_coffee").addEventListener("click", function (e) {
     e.preventDefault();
     document.getElementById("coffeeModal").style.display = "block";
-  }); // Close modals on &times;
+  }); // Close modals on × button
 
   document.querySelectorAll(".close-btn").forEach(function (btn) {
     btn.addEventListener("click", function (e) {
       var modalId = e.target.dataset.modal;
       document.getElementById(modalId).style.display = "none";
     });
-  }); // Optional: Close modal when clicking outside
+  }); // Close modal when clicking outside
 
   window.addEventListener("click", function (e) {
     document.querySelectorAll(".modal").forEach(function (modal) {
@@ -64,30 +63,51 @@ document.addEventListener("DOMContentLoaded", function () {
         modal.style.display = "none";
       }
     });
-  });
-}); // Close sidebar only when × is clicked
+  }); // ── Coffee STK Push feedback ────────────────────────────
+
+  var coffeeForm = document.getElementById('coffee-form');
+  var coffeeBtn = document.getElementById('coffee-pay-btn');
+  var coffeeStatus = document.getElementById('coffee-status');
+
+  if (coffeeForm) {
+    coffeeForm.addEventListener('submit', function (e) {
+      e.preventDefault(); // stop instant submit
+
+      var phone = document.getElementById('mpesa-number').value.trim();
+      var amount = document.getElementById('amount').value.trim();
+      if (!phone || !amount) return; // Show alert inside modal immediately
+
+      coffeeStatus.style.display = 'block';
+      coffeeStatus.style.background = 'rgba(0, 255, 13, 0.33)';
+      coffeeStatus.style.border = '1px solid #00aeff';
+      coffeeStatus.style.color = '#000000';
+      coffeeStatus.innerHTML = '⏳ Sending STK Push...<br><strong>📱 Check your phone and enter your M-Pesa PIN!</strong>'; // Disable button to prevent double submit
+
+      coffeeBtn.disabled = true;
+      coffeeBtn.innerHTML = '⏳ Processing...'; // Submit after 1.5s so user sees the message
+
+      setTimeout(function () {
+        coffeeForm.submit();
+      }, 1500);
+    });
+  }
+}); // ── Close Sidebar ───────────────────────────────────────────
 
 document.querySelector("#sidebar .close-sidebar").addEventListener("click", function () {
   document.getElementById("sidebar").classList.remove("active");
-}); //Security functionality to display yhe admin login form
-// Admin dashboard link functionality hide the admin form 
+}); // ── Admin secret tap (4 taps to reveal) ────────────────────
 
 document.addEventListener("DOMContentLoaded", function () {
-  var tapCount = 0; // Get the admin button and its data-url attribute
-
+  var tapCount = 0;
   var adminButton = document.getElementById("hidden_admin_function");
-  var adminLoginUrl = adminButton.getAttribute('data-url'); // Get the URL from the data attribute
-
+  var adminLoginUrl = adminButton.getAttribute('data-url');
   adminButton.addEventListener("click", function (event) {
-    event.preventDefault(); // Prevent default link behavior
-
+    event.preventDefault();
     tapCount++;
 
     if (tapCount === 4) {
-      // Redirect to the admin login page using the Flask-generated URL
       window.location.href = adminLoginUrl;
-    } // Reset the tap count after 2 seconds of inactivity
-
+    }
 
     setTimeout(function () {
       tapCount = 0;

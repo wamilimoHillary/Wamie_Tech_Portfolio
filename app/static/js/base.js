@@ -1,40 +1,34 @@
+// ── Sidebar ────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", function () {
     const sidebar = document.getElementById("sidebar");
     const menuBtn = document.querySelector(".menu-btn");
-    const links = document.querySelectorAll("#sidebar a");
+    const links   = document.querySelectorAll("#sidebar a");
 
-    // Toggle sidebar
     menuBtn.addEventListener("click", function () {
         sidebar.classList.toggle("active");
     });
 
-    // Remove 'active' class from all links, then add to clicked link
     links.forEach(link => {
         link.addEventListener("click", function () {
-            links.forEach(l => l.classList.remove("active")); // Remove from others
-            this.classList.add("active"); // Add to clicked link
+            links.forEach(l => l.classList.remove("active"));
+            this.classList.add("active");
         });
     });
 });
 
-
-
+// ── Dark Mode ───────────────────────────────────────────────
 const toggleSwitch = document.getElementById('toggle-dark-mode');
 
-// Check if dark mode was previously enabled and apply it
 if (localStorage.getItem('dark-mode') === 'enabled') {
     document.body.classList.add('dark-mode');
-    toggleSwitch.checked = true; // Set the checkbox to checked if dark mode is enabled
+    toggleSwitch.checked = true;
 } else {
     document.body.classList.remove('dark-mode');
-    toggleSwitch.checked = false; // Set the checkbox to unchecked if dark mode is disabled
+    toggleSwitch.checked = false;
 }
 
-// Add event listener to toggle dark mode
 toggleSwitch.addEventListener('change', () => {
     document.body.classList.toggle('dark-mode');
-
-    // Save the current state of dark mode in localStorage
     if (document.body.classList.contains('dark-mode')) {
         localStorage.setItem('dark-mode', 'enabled');
     } else {
@@ -42,66 +36,91 @@ toggleSwitch.addEventListener('change', () => {
     }
 });
 
-
-
+// ── Modals + Coffee STK feedback ───────────────────────────
 document.addEventListener("DOMContentLoaded", () => {
-  // Open Hire Me Modal
-  document.querySelector(".hire-me").addEventListener("click", e => {
-    e.preventDefault();
-    document.getElementById("hireModal").style.display = "block";
-  });
 
-  // Open Coffee Modal
-  document.querySelector(".buy_me_coffee").addEventListener("click", e => {
-    e.preventDefault();
-    document.getElementById("coffeeModal").style.display = "block";
-  });
-
-  // Close modals on &times;
-  document.querySelectorAll(".close-btn").forEach(btn => {
-    btn.addEventListener("click", e => {
-      const modalId = e.target.dataset.modal;
-      document.getElementById(modalId).style.display = "none";
+    // Open Hire Me Modal
+    document.querySelector(".hire-me").addEventListener("click", e => {
+        e.preventDefault();
+        document.getElementById("hireModal").style.display = "block";
     });
-  });
 
-  // Optional: Close modal when clicking outside
-  window.addEventListener("click", e => {
-    document.querySelectorAll(".modal").forEach(modal => {
-      if (e.target === modal) {
-        modal.style.display = "none";
-      }
+    // Open Coffee Modal
+    document.querySelector(".buy_me_coffee").addEventListener("click", e => {
+        e.preventDefault();
+        document.getElementById("coffeeModal").style.display = "block";
     });
-  });
+
+    // Close modals on × button
+    document.querySelectorAll(".close-btn").forEach(btn => {
+        btn.addEventListener("click", e => {
+            const modalId = e.target.dataset.modal;
+            document.getElementById(modalId).style.display = "none";
+        });
+    });
+
+    // Close modal when clicking outside
+    window.addEventListener("click", e => {
+        document.querySelectorAll(".modal").forEach(modal => {
+            if (e.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+    });
+
+    // ── Coffee STK Push feedback ────────────────────────────
+    const coffeeForm   = document.getElementById('coffee-form');
+    const coffeeBtn    = document.getElementById('coffee-pay-btn');
+    const coffeeStatus = document.getElementById('coffee-status');
+
+    if (coffeeForm) {
+        coffeeForm.addEventListener('submit', function (e) {
+            e.preventDefault(); // stop instant submit
+
+            const phone  = document.getElementById('mpesa-number').value.trim();
+            const amount = document.getElementById('amount').value.trim();
+
+            if (!phone || !amount) return;
+
+            // Show alert inside modal immediately
+            coffeeStatus.style.display    = 'block';
+            coffeeStatus.style.background = 'rgba(0, 255, 13, 0.33)';
+            coffeeStatus.style.border     = '1px solid #00aeff';
+            coffeeStatus.style.color      = '#000000';
+            coffeeStatus.innerHTML        = '⏳ Sending STK Push...<br><strong>📱 Check your phone and enter your M-Pesa PIN!</strong>';
+
+            // Disable button to prevent double submit
+            coffeeBtn.disabled  = true;
+            coffeeBtn.innerHTML = '⏳ Processing...';
+
+            // Submit after 1.5s so user sees the message
+            setTimeout(() => {
+                coffeeForm.submit();
+            }, 1500);
+        });
+    }
+
 });
 
-
-// Close sidebar only when × is clicked
+// ── Close Sidebar ───────────────────────────────────────────
 document.querySelector("#sidebar .close-sidebar").addEventListener("click", function () {
     document.getElementById("sidebar").classList.remove("active");
 });
 
-
-//Security functionality to display yhe admin login form
-// Admin dashboard link functionality hide the admin form 
+// ── Admin secret tap (4 taps to reveal) ────────────────────
 document.addEventListener("DOMContentLoaded", () => {
     let tapCount = 0;
-    // Get the admin button and its data-url attribute
-    const adminButton = document.getElementById("hidden_admin_function");
-    const adminLoginUrl = adminButton.getAttribute('data-url'); // Get the URL from the data attribute
-    
+    const adminButton   = document.getElementById("hidden_admin_function");
+    const adminLoginUrl = adminButton.getAttribute('data-url');
+
     adminButton.addEventListener("click", (event) => {
-        event.preventDefault(); // Prevent default link behavior
+        event.preventDefault();
         tapCount++;
 
         if (tapCount === 4) {
-            // Redirect to the admin login page using the Flask-generated URL
             window.location.href = adminLoginUrl;
         }
 
-        // Reset the tap count after 2 seconds of inactivity
-        setTimeout(() => {
-            tapCount = 0;
-        }, 2000);
+        setTimeout(() => { tapCount = 0; }, 2000);
     });
 });
